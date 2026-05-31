@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(sqlite3 -header -column /Volumes/CrucialX6/Demos/WhiteLabel-CallCenter/agora-white-label-callcenter/backend/dev.db 'SELECT * FROM __TRACKED_VAR__ LIMIT 2;')"
+    ]
+  }
+}
