@@ -62,8 +62,15 @@ def _serialize(p: PhoneNumberV2) -> dict:
 async def create_phone_number(body: CreatePhoneNumberRequest, db: AsyncSession = Depends(get_db)):
     payload = body.model_dump(exclude_none=True)
 
-    async with httpx.AsyncClient(timeout=15) as client:
-        resp = await client.post(PHONE_NUMBER_BASE_URL, json=payload, headers=_headers())
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(PHONE_NUMBER_BASE_URL, json=payload, headers=_headers())
+    except httpx.ConnectTimeout:
+        raise HTTPException(status_code=504, detail='Connection to Agora API timed out. Check network / VPN.')
+    except httpx.TimeoutException as e:
+        raise HTTPException(status_code=504, detail=f'Agora API request timed out: {e}')
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=502, detail=f'Failed to reach Agora API: {e}')
 
     if resp.status_code not in (200, 201):
         raise HTTPException(status_code=resp.status_code, detail=resp.text)

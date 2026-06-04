@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '../lib/utils'
-import { Settings, PlusCircle, Radio, PhoneCall, Bot, History } from 'lucide-react'
+import { Settings, PlusCircle, Radio, PhoneCall, Bot, History, PhoneIncoming, BarChart2 } from 'lucide-react'
 import agoraLogo from '../assets/agora-logo-2.webp'
 import { LANGUAGES, setLang, type Lang } from '../i18n'
 
@@ -10,7 +10,9 @@ const NAV_ICON_COLOR: Record<string, string> = {
   '/':             'text-gblue-500',
   '/phone-numbers':'text-ggreen-500',
   '/agents':       'text-gyellow-600',
-  '/call-history': 'text-gpurple-500',
+  '/call-history':     'text-gpurple-500',
+  '/inbound-routing':  'text-ggreen-500',
+  '/dashboard':        'text-gblue-500',
   '/surveys/new':  'text-gblue-500',
   '/settings':     'text-ink-tertiary',
 }
@@ -19,11 +21,13 @@ export function Layout() {
   const { t, i18n } = useTranslation()
 
   const NAV = [
-    { to: '/',             label: t('app_nav.campaigns'),    icon: Radio,       end: true },
-    { to: '/phone-numbers',label: t('app_nav.phone_numbers'),icon: PhoneCall },
-    { to: '/agents',       label: t('app_nav.agents'),       icon: Bot },
-    { to: '/call-history', label: t('app_nav.call_history'), icon: History },
-    { to: '/surveys/new',  label: t('nav.new_campaign'),     icon: PlusCircle },
+    { to: '/dashboard',       label: 'Dashboard',                icon: BarChart2 },
+    { to: '/surveys/new',     label: t('nav.new_campaign'),      icon: PlusCircle },
+    { to: '/',                label: t('app_nav.campaigns'),     icon: Radio,         end: true },
+    { to: '/inbound-routing', label: 'Inbound Routing',         icon: PhoneIncoming },
+    { to: '/phone-numbers',   label: t('app_nav.phone_numbers'), icon: PhoneCall },
+    { to: '/agents',          label: t('app_nav.agents'),        icon: Bot },
+    { to: '/call-history',    label: t('app_nav.call_history'),  icon: History },
     { to: '/settings',     label: t('nav.settings'),         icon: Settings },
   ]
 

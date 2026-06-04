@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { SurveyListPage } from './pages/surveys/SurveyListPage'
 import { NewSurveyPage } from './pages/surveys/NewSurveyPage'
@@ -13,19 +13,23 @@ import { QuotaInsightPage } from './pages/campaigns/QuotaInsightPage'
 import { PhoneNumbersPage } from './pages/phone-numbers/PhoneNumbersPage'
 import { AgentsPage } from './pages/agents/AgentsPage'
 import { CallHistoryPage } from './pages/call-history/CallHistoryPage'
+import { InboundRoutingPage } from './pages/inbound-routing/InboundRoutingPage'
+import { AnalyticsDashboard } from './pages/analytics/AnalyticsDashboard'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<CampaignsPage />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="campaigns/:id/agent-prompt" element={<CampaignAgentPromptPage />} />
           <Route path="campaigns/:id" element={<CampaignDetailPage />} />
           <Route path="campaigns/:id/quota-insight" element={<QuotaInsightPage />} />
           <Route path="phone-numbers" element={<PhoneNumbersPage />} />
           <Route path="agents" element={<AgentsPage />} />
           <Route path="call-history" element={<CallHistoryPage />} />
+          <Route path="inbound-routing" element={<InboundRoutingPage />} />
+          <Route path="dashboard" element={<AnalyticsDashboard />} />
           <Route path="surveys" element={<SurveyListPage />} />
           <Route path="surveys/new" element={<NewSurveyPage />} />
           <Route path="surveys/:id/prompt" element={<PromptEditorPage />} />
