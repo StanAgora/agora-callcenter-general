@@ -28,7 +28,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-          <Route index element={<Navigate to="/campaigns" replace />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="campaigns" element={<CampaignsPage />} />
           <Route path="campaigns/:id/agent-prompt" element={<CampaignAgentPromptPage />} />
           <Route path="campaigns/:id" element={<CampaignDetailPage />} />

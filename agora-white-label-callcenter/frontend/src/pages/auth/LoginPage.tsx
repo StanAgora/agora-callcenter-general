@@ -22,7 +22,7 @@ export function LoginPage() {
     setTimeout(() => {
       const ok = login(username.trim(), password)
       if (ok) {
-        navigate('/', { replace: true })
+        navigate('/dashboard', { replace: true })
       } else {
         setError(t('login.error'))
         setLoading(false)
