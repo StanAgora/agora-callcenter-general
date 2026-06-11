@@ -3,10 +3,10 @@ import { cn } from '../../lib/utils'
 import type { SurveyStatus } from '../../types'
 
 const STATUS_STYLES: Record<SurveyStatus, string> = {
-  draft:     'bg-surface text-ink-tertiary border border-border',
-  running:   'bg-ggreen-50 text-ggreen-500 border border-ggreen-100',
-  paused:    'bg-gyellow-50 text-gyellow-600 border border-gyellow-100',
-  completed: 'bg-gblue-50 text-gblue-500 border border-gblue-100',
+  draft:     'bg-gray-100 text-gray-500 border border-gray-200',
+  running:   'bg-emerald-50 text-emerald-600 border border-emerald-100',
+  paused:    'bg-amber-50 text-amber-600 border border-amber-100',
+  completed: 'bg-blue-50 text-blue-600 border border-blue-100',
 }
 
 export function StatusBadge({ status }: { status: SurveyStatus }) {
@@ -17,7 +17,7 @@ export function StatusBadge({ status }: { status: SurveyStatus }) {
       STATUS_STYLES[status]
     )}>
       {status === 'running' && (
-        <span className="w-1.5 h-1.5 rounded-full bg-ggreen-400 animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
       )}
       {t(`status.${status}`)}
     </span>
@@ -29,8 +29,8 @@ export function TypeBadge({ type }: { type: 'CATI' | 'URL' }) {
     <span className={cn(
       'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
       type === 'CATI'
-        ? 'bg-gblue-50 text-gblue-500 border border-gblue-100'
-        : 'bg-gteal-50 text-gteal-500 border border-gteal-50'
+        ? 'bg-indigo-50 text-indigo-600 border border-indigo-100'
+        : 'bg-blue-50 text-blue-600 border border-blue-100'
     )}>
       {type}
     </span>

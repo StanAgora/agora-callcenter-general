@@ -38,12 +38,11 @@ function pct(completed: number, target: number): number {
 
 function cellColor(p: number) {
   if (p >= 100) return { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200', border: 'border-emerald-200' }
-  if (p >= 60)  return { bar: 'bg-blue-500',    badge: 'bg-blue-50 text-blue-700 border-blue-200',           border: 'border-blue-200' }
-  if (p >= 20)  return { bar: 'bg-amber-400',   badge: 'bg-amber-50 text-amber-700 border-amber-200',        border: 'border-amber-200' }
-  return               { bar: 'bg-slate-300',   badge: 'bg-slate-50 text-slate-500 border-slate-200',        border: 'border-slate-200' }
+  if (p >= 60)  return { bar: 'bg-indigo-500',  badge: 'bg-indigo-50 text-indigo-700 border-indigo-200',   border: 'border-indigo-200' }
+  if (p >= 20)  return { bar: 'bg-amber-400',   badge: 'bg-amber-50 text-amber-700 border-amber-200',      border: 'border-amber-200' }
+  return               { bar: 'bg-gray-300',    badge: 'bg-gray-50 text-gray-500 border-gray-200',         border: 'border-gray-200' }
 }
 
-/** 有 transcript 命中记录时，卡片底色：未完成淡黄、已满额淡绿；无命中沿用默认白底 */
 function quotaCardSurface(hasHits: boolean, isQuotaFull: boolean): { bg: string; border: string } {
   if (!hasHits) return { bg: 'bg-white', border: '' }
   if (isQuotaFull) return { bg: 'bg-emerald-50', border: 'border-emerald-200' }
@@ -146,36 +145,36 @@ export function QuotaInsightPage() {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-gray-50">
       {/* Top bar */}
-      <div className="flex-shrink-0 flex items-center gap-3 px-6 py-4 border-b border-slate-200 bg-white">
+      <div className="flex-shrink-0 flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-white">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
           <ArrowLeft size={15} /> {t('agora.back')}
         </button>
-        <div className="w-px h-4 bg-slate-200" />
+        <div className="w-px h-4 bg-gray-200" />
         <div>
-          <h1 className="font-semibold text-slate-900 text-sm leading-none">
+          <h1 className="font-semibold text-gray-900 text-sm leading-none">
             {campaign?.campaign_name ?? id}
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5 font-mono">{id}</p>
+          <p className="text-xs text-gray-400 mt-0.5 font-mono">{id}</p>
         </div>
-        <span className="ml-auto text-xs font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2.5 py-1">
+        <span className="ml-auto text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1">
           Quota Insight
         </span>
       </div>
 
       {/* Body */}
       {loading && (
-        <div className="flex-1 flex items-center justify-center text-slate-400 gap-2">
+        <div className="flex-1 flex items-center justify-center text-gray-400 gap-2">
           <Loader2 size={18} className="animate-spin" /> {t('agora.loading')}
         </div>
       )}
 
       {error && (
-        <div className="m-6 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+        <div className="m-6 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
           <AlertCircle size={15} /> {error}
         </div>
       )}
@@ -183,15 +182,15 @@ export function QuotaInsightPage() {
       {!loading && !error && (
         <div className="flex-1 overflow-hidden flex min-h-0">
 
-          {/* ── LEFT: summary + hit records 表格（固定视区高度）── */}
+          {/* ── LEFT: summary + hit records table (fixed viewport height) ── */}
           <div
             className={cn(
               'flex-1 min-w-0 min-h-0 flex flex-col gap-5 overflow-hidden p-6',
-              'bg-slate-50/60',
+              'bg-gray-50',
             )}
           >
             <div className="flex-shrink-0 space-y-3">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
                 {t('quota_insight.summary')}
               </p>
 
@@ -201,31 +200,30 @@ export function QuotaInsightPage() {
                   'overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
                 )}
               >
-                {/* 与 CampaignDetail 通话概览卡一致：rounded-lg px-3 py-2.5、11px 标签、lg 数字 */}
                 <div
                   className={cn(
-                    'flex min-w-[9.5rem] flex-1 items-start gap-2 rounded-lg border border-slate-200',
+                    'flex min-w-[9.5rem] flex-1 items-start gap-2 rounded-lg border border-gray-100',
                     'bg-white px-3 py-2.5 shadow-sm',
                   )}
                 >
-                  <div className="mt-0.5 rounded-md bg-slate-50 p-1.5 text-slate-600">
+                  <div className="mt-0.5 rounded-md bg-gray-50 p-1.5 text-gray-600">
                     <Percent size={14} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-medium text-slate-500">
+                    <p className="text-[11px] font-medium text-gray-500">
                       {t('quota_insight.overall')}
                     </p>
-                    <p className="text-lg font-semibold tabular-nums text-slate-900 tracking-tight">
+                    <p className="text-lg font-semibold tabular-nums text-gray-900 tracking-tight">
                       {overallPct}%
                     </p>
-                    <div className="mt-1.5 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div className="mt-1.5 h-1.5 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className={cn(
                           'h-full rounded-full transition-all duration-700',
                           overallPct >= 100
                             ? 'bg-emerald-500'
                             : overallPct >= 50
-                              ? 'bg-blue-500'
+                              ? 'bg-indigo-500'
                               : 'bg-amber-400',
                         )}
                         style={{ width: `${overallPct}%` }}
@@ -238,8 +236,8 @@ export function QuotaInsightPage() {
                     icon: Target,
                     label: t('quota_insight.stat_target'),
                     value: totalTarget,
-                    color: 'text-violet-600',
-                    box: 'bg-violet-50',
+                    color: 'text-indigo-600',
+                    box: 'bg-indigo-50',
                   },
                   {
                     icon: TrendingUp,
@@ -259,7 +257,7 @@ export function QuotaInsightPage() {
                   <div
                     key={label}
                     className={cn(
-                      'flex min-w-[8.5rem] flex-1 items-start gap-2 rounded-lg border border-slate-200',
+                      'flex min-w-[8.5rem] flex-1 items-start gap-2 rounded-lg border border-gray-100',
                       'bg-white px-3 py-2.5 shadow-sm',
                     )}
                   >
@@ -267,8 +265,8 @@ export function QuotaInsightPage() {
                       <Icon size={14} className={color} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[11px] font-medium text-slate-500">{label}</p>
-                      <p className="text-lg font-semibold tabular-nums text-slate-900">
+                      <p className="text-[11px] font-medium text-gray-500">{label}</p>
+                      <p className="text-lg font-semibold tabular-nums text-gray-900">
                         {value}
                       </p>
                     </div>
@@ -278,32 +276,32 @@ export function QuotaInsightPage() {
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col gap-2">
-              <p className="flex-shrink-0 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+              <p className="flex-shrink-0 text-xs font-semibold text-gray-400 uppercase tracking-wide">
                 {t('quota_insight.hit_records')}
               </p>
               <div
                 className={cn(
                   'h-[min(50vh,28rem)] min-h-[16rem] min-w-0 flex-1',
-                  'overflow-hidden rounded-lg border border-slate-200',
+                  'overflow-hidden rounded-lg border border-gray-100',
                   'bg-white shadow-sm',
                 )}
               >
                 <div className="h-full overflow-auto">
-                  <table className="w-full border-collapse text-left text-sm text-slate-800">
-                    <thead className="sticky top-0 z-[1] border-b border-slate-200 bg-slate-50">
+                  <table className="w-full border-collapse text-left text-sm text-gray-800">
+                    <thead className="sticky top-0 z-[1] border-b border-gray-100 bg-gray-50">
                       <tr>
                         <th
-                          className="w-[22%] max-w-xs whitespace-nowrap px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+                          className="w-[22%] max-w-xs whitespace-nowrap px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500"
                         >
                           {t('quota_insight.hit_call_id')}
                         </th>
                         <th
-                          className="w-40 min-w-[8rem] whitespace-nowrap px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+                          className="w-40 min-w-[8rem] whitespace-nowrap px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500"
                         >
                           {t('quota_insight.hit_confidence')}
                         </th>
                         <th
-                          className="px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+                          className="px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500"
                         >
                           {t('quota_insight.hit_evidence')}
                         </th>
@@ -316,17 +314,17 @@ export function QuotaInsightPage() {
                             key={`${row.call_id}-${row.at ?? idx}`}
                             className={cn(
                               'align-top transition-colors',
-                              'odd:bg-white even:bg-blue-50',
-                              'hover:bg-blue-100/60',
+                              'odd:bg-white even:bg-gray-50',
+                              'hover:bg-indigo-50',
                             )}
                           >
-                            <td className="px-3 py-2.5 font-mono text-xs text-slate-700 break-all">
+                            <td className="px-3 py-2.5 font-mono text-xs text-gray-700 break-all">
                               {row.call_id}
                             </td>
-                            <td className="px-3 py-2.5 text-sm tabular-nums text-slate-800">
+                            <td className="px-3 py-2.5 text-sm tabular-nums text-gray-800">
                               {formatConfidence(row.confidence)}
                             </td>
-                            <td className="px-3 py-2.5 text-sm leading-relaxed text-slate-700 break-words">
+                            <td className="px-3 py-2.5 text-sm leading-relaxed text-gray-700 break-words">
                               {row.evidence?.trim() ? row.evidence : '—'}
                             </td>
                           </tr>
@@ -334,13 +332,12 @@ export function QuotaInsightPage() {
                       ) : (
                         <tr
                           className={cn(
-                            'odd:bg-white even:bg-blue-50',
-                            'hover:bg-blue-100/60',
+                            'odd:bg-white even:bg-gray-50',
                           )}
                         >
                           <td
                             colSpan={3}
-                            className="px-3 py-20 text-center text-sm text-slate-400"
+                            className="px-3 py-20 text-center text-sm text-gray-400"
                           >
                             {hitTablePlaceholder}
                           </td>
@@ -353,19 +350,19 @@ export function QuotaInsightPage() {
             </div>
           </div>
 
-          {/* ── RIGHT: quota cell cards (原 By condition 区域) ─────────── */}
-          <div className="w-72 flex-shrink-0 border-l border-slate-200 bg-slate-50 overflow-y-auto p-6 space-y-3 min-h-0">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">
+          {/* ── RIGHT: quota cell cards ─────────── */}
+          <div className="w-72 flex-shrink-0 border-l border-gray-100 bg-white overflow-y-auto p-6 space-y-3 min-h-0">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
               {t('quota_insight.quota_title', { n: cells.length })}
             </p>
 
             {cells.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
+              <div className="flex flex-col items-center justify-center py-16 text-gray-300 gap-3">
                 <BarChart3 size={40} className="opacity-40" />
-                <p className="text-sm text-slate-400 text-center">
+                <p className="text-sm text-gray-400 text-center">
                   {t('quota_insight.no_cells')}
                 </p>
-                <p className="text-xs text-slate-400 text-center">
+                <p className="text-xs text-gray-400 text-center">
                   {t('quota_insight.no_cells_hint')}
                 </p>
               </div>
@@ -390,9 +387,9 @@ export function QuotaInsightPage() {
                   className={cn(
                     'w-full text-left border rounded-xl p-4 space-y-3 transition-shadow',
                     surface.bg,
-                    'hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400',
+                    'hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400',
                     cardBorder,
-                    isSelected && 'ring-2 ring-violet-400 border-violet-300 shadow-sm',
+                    isSelected && 'ring-2 ring-indigo-400 border-indigo-300 shadow-sm',
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -401,17 +398,17 @@ export function QuotaInsightPage() {
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                           {Object.entries(cell.filters).map(([k, v], i, arr) => (
                             <span key={k} className="inline-flex items-baseline gap-1 text-sm">
-                              <span className="text-slate-400 text-xs">{k}</span>
-                              <span className="text-slate-300 text-xs">=</span>
-                              <span className="text-slate-800 font-semibold break-all">{v}</span>
+                              <span className="text-gray-400 text-xs">{k}</span>
+                              <span className="text-gray-300 text-xs">=</span>
+                              <span className="text-gray-800 font-semibold break-all">{v}</span>
                               {i < arr.length - 1 && (
-                                <span className="text-slate-200 ml-0.5 text-xs">·</span>
+                                <span className="text-gray-200 ml-0.5 text-xs">·</span>
                               )}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm font-medium text-slate-700 break-words">
+                        <p className="text-sm font-medium text-gray-700 break-words">
                           {cell.label}
                         </p>
                       )}
@@ -428,19 +425,19 @@ export function QuotaInsightPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className={cn('h-full rounded-full transition-all duration-500', c.bar)}
                         style={{ width: `${p}%` }}
                       />
                     </div>
-                    <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                    <div className="flex items-center justify-between text-xs text-gray-400 gap-2">
                       <span>
                         {t('quota_insight.completed')}{' '}
-                        <strong className="text-slate-700">{cell.completed}</strong>
+                        <strong className="text-gray-700">{cell.completed}</strong>
                         <span className="mx-1">/</span>
                         {t('quota_insight.target')}{' '}
-                        <strong className="text-slate-700">{cell.target}</strong>
+                        <strong className="text-gray-700">{cell.target}</strong>
                       </span>
                       <span className="text-right">
                         {t('quota_insight.remaining', { n: Math.max(0, cell.target - cell.completed) })}

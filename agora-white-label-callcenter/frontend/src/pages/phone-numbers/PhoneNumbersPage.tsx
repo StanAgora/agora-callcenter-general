@@ -126,16 +126,16 @@ export function PhoneNumbersPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 min-h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Phone Numbers</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{t('phone_numbers.page_subtitle')}</p>
+          <h1 className="text-xl font-bold text-gray-900">Phone Numbers</h1>
+          <p className="text-sm text-gray-600 mt-0.5">{t('phone_numbers.page_subtitle')}</p>
         </div>
         <button
           onClick={() => { setShowModal(true); setFormError('') }}
-          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
         >
           <PlusCircle size={16} />
           Add Number
@@ -144,29 +144,30 @@ export function PhoneNumbersPage() {
 
       {/* States */}
       {loading && (
-        <div className="flex items-center justify-center py-20 text-slate-400">
+        <div className="flex items-center justify-center py-20 text-gray-400">
           <Loader2 size={20} className="animate-spin mr-2" />
           <span className="text-sm">{t('common.loading')}</span>
         </div>
       )}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">{error}</div>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-600">{error}</div>
       )}
 
       {/* Table */}
       {!loading && !error && (
         <>
           {numbers.length === 0 ? (
-            <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400">
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-12 text-center text-gray-400">
               <PhoneCall size={32} className="mx-auto mb-3 opacity-30" />
               <p className="text-sm">{t('phone_numbers.empty')}</p>
               <p className="text-xs mt-1">{t('phone_numbers.empty_hint')}</p>
             </div>
           ) : (
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+              <table className="w-full min-w-[820px] text-sm">
                 <thead>
-                  <tr className="border-b border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <tr className="border-b border-gray-100 bg-gray-50 text-xs font-medium text-gray-400 uppercase tracking-wide">
                     <th className="text-left px-4 py-3">Number ID</th>
                     <th className="text-left px-4 py-3">Name</th>
                     <th className="text-left px-4 py-3">Phone Number</th>
@@ -178,32 +179,32 @@ export function PhoneNumbersPage() {
                     <th className="px-4 py-3"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-gray-100">
                   {numbers.map(n => (
-                    <tr key={n.number_id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-4 py-3 font-mono text-xs text-slate-400">{n.number_id}</td>
-                      <td className="px-4 py-3 font-medium text-slate-800">{n.name}</td>
-                      <td className="px-4 py-3 font-mono text-slate-700">{n.phone_number}</td>
+                    <tr key={n.number_id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3 font-mono text-xs text-gray-400">{n.number_id}</td>
+                      <td className="px-4 py-3 font-medium text-gray-900">{n.name}</td>
+                      <td className="px-4 py-3 font-mono text-gray-600">{n.phone_number}</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600">
                           {n.type}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-slate-600">{n.sip_gateway_host ?? '—'}</td>
-                      <td className="px-4 py-3 text-slate-600">{n.sip_signaling_port ?? '—'}</td>
+                      <td className="px-4 py-3 text-gray-600">{n.sip_gateway_host ?? '—'}</td>
+                      <td className="px-4 py-3 text-gray-600">{n.sip_signaling_port ?? '—'}</td>
                       <td className="px-4 py-3">
                         {n.outbound_protocol ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 uppercase">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 uppercase">
                             {n.outbound_protocol}
                           </span>
                         ) : '—'}
                       </td>
-                      <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{formatDate(n.created_at)}</td>
+                      <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{formatDate(n.created_at)}</td>
                       <td className="px-4 py-3">
                         <button
                           onClick={() => handleDelete(n.number_id)}
                           disabled={deletingId === n.number_id}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-40"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-colors disabled:opacity-40"
                         >
                           {deletingId === n.number_id
                             ? <Loader2 size={13} className="animate-spin" />
@@ -216,6 +217,7 @@ export function PhoneNumbersPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
         </>
@@ -224,12 +226,12 @@ export function PhoneNumbersPage() {
       {/* Add Number Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-              <h2 className="font-semibold text-slate-900">Add Phone Number</h2>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-lg w-full max-w-md mx-4">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="font-semibold text-gray-900">Add Phone Number</h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X size={18} />
               </button>
@@ -238,39 +240,39 @@ export function PhoneNumbersPage() {
             <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
               {/* Name */}
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
-                  Name <span className="text-red-500">*</span>
+                <label className="block text-xs font-medium text-gray-400 mb-1">
+                  Name <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="EmbrainDemo1"
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
               {/* Phone Number */}
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
-                  Phone Number <span className="text-red-500">*</span>
+                <label className="block text-xs font-medium text-gray-400 mb-1">
+                  Phone Number <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
                   value={form.phone_number}
                   onChange={e => setForm(f => ({ ...f, phone_number: e.target.value }))}
                   placeholder="+12013040791"
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
               {/* Type */}
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Type</label>
                 <select
                   value={form.type}
                   onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                 >
                   {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -278,7 +280,7 @@ export function PhoneNumbersPage() {
 
               {/* SIP Gateway Host */}
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-gray-400 mb-1">
                   SIP_TO_Domain (sip_gateway_host)
                 </label>
                 <input
@@ -286,14 +288,14 @@ export function PhoneNumbersPage() {
                   value={form.sip_gateway_host}
                   onChange={e => setForm(f => ({ ...f, sip_gateway_host: e.target.value }))}
                   placeholder="43.166.133.68"
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
               {/* SIP Port + Protocol (2 columns) */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-gray-400 mb-1">
                     SIP_Port (sip_signaling_port)
                   </label>
                   <input
@@ -301,15 +303,15 @@ export function PhoneNumbersPage() {
                     value={form.sip_signaling_port}
                     onChange={e => setForm(f => ({ ...f, sip_signaling_port: Number(e.target.value) }))}
                     placeholder="5060"
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">Outbound Protocol</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Outbound Protocol</label>
                   <select
                     value={form.outbound_protocol}
                     onChange={e => setForm(f => ({ ...f, outbound_protocol: e.target.value }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
                   >
                     {PROTOCOL_OPTIONS.map(p => <option key={p} value={p}>{p.toUpperCase()}</option>)}
                   </select>
@@ -326,7 +328,7 @@ export function PhoneNumbersPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>
@@ -335,7 +337,7 @@ export function PhoneNumbersPage() {
                   disabled={submitting}
                   className={cn(
                     'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                    submitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
                   )}
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}

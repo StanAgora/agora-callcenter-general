@@ -37,17 +37,17 @@ const SECTION_LABEL_KEYS: Record<string, string> = {
   data_mapping:           'prompt_editor.label_section_mapping',
 }
 
-// Color scheme
+// Clean white minimal color scheme — all sections use gray/indigo tones
 const SECTION_COLORS: Record<string, { header: string; border: string; badge: string }> = {
-  greeting:        { header: 'bg-emerald-50 hover:bg-emerald-100', border: 'border-emerald-300', badge: 'bg-emerald-100 text-emerald-700' },
-  failure_message: { header: 'bg-rose-50 hover:bg-rose-100',       border: 'border-rose-300',    badge: 'bg-rose-100 text-rose-700' },
-  core_guidelines:        { header: 'bg-blue-50 hover:bg-blue-100',     border: 'border-blue-200',    badge: 'bg-blue-100 text-blue-700' },
-  randomization_rules:    { header: 'bg-amber-50 hover:bg-amber-100',   border: 'border-amber-200',   badge: 'bg-amber-100 text-amber-700' },
-  global_execution_logic: { header: 'bg-violet-50 hover:bg-violet-100', border: 'border-violet-200',  badge: 'bg-violet-100 text-violet-700' },
-  question_sop:           { header: 'bg-teal-50 hover:bg-teal-100',     border: 'border-teal-200',    badge: 'bg-teal-100 text-teal-700' },
-  interview_script:       { header: 'bg-green-50 hover:bg-green-100',   border: 'border-green-200',   badge: 'bg-green-100 text-green-700' },
-  closing_remarks:        { header: 'bg-orange-50 hover:bg-orange-100', border: 'border-orange-200',  badge: 'bg-orange-100 text-orange-700' },
-  data_mapping:           { header: 'bg-slate-50 hover:bg-slate-100',   border: 'border-slate-200',   badge: 'bg-slate-100 text-slate-600' },
+  greeting:        { header: 'bg-emerald-50 hover:bg-emerald-100', border: 'border-emerald-200', badge: 'bg-emerald-50 text-emerald-700' },
+  failure_message: { header: 'bg-red-50 hover:bg-red-100',         border: 'border-red-200',     badge: 'bg-red-50 text-red-600' },
+  core_guidelines:        { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-indigo-50 text-indigo-600' },
+  randomization_rules:    { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-amber-50 text-amber-700' },
+  global_execution_logic: { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-indigo-50 text-indigo-600' },
+  question_sop:           { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-gray-100 text-gray-600' },
+  interview_script:       { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-indigo-50 text-indigo-600' },
+  closing_remarks:        { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-gray-100 text-gray-600' },
+  data_mapping:           { header: 'bg-gray-50 hover:bg-gray-100',    border: 'border-gray-200',    badge: 'bg-gray-100 text-gray-600' },
 }
 
 interface PromptSection {
@@ -342,16 +342,16 @@ export function PromptEditorPage() {
   const lineCount = displayPrompt.split('\n').length
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gray-50">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+      <div className="flex items-center justify-between bg-white border-b border-gray-100 px-6 py-4 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors">
+          <Link to="/" className="text-gray-400 hover:text-gray-600 transition-colors">
             <ChevronLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-base font-bold text-slate-900">{t('prompt_editor.title')}</h1>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h1 className="text-base font-bold text-gray-900">{t('prompt_editor.title')}</h1>
+            <p className="text-xs text-gray-400 mt-0.5">
               {data?.has_file ? t('prompt_editor.subtitle_pdf') : t('prompt_editor.subtitle_docx')}
             </p>
           </div>
@@ -359,7 +359,7 @@ export function PromptEditorPage() {
 
         <div className="flex items-center gap-2">
           {genState === 'saved' && (
-            <span className="flex items-center gap-1 text-green-600 text-xs font-medium">
+            <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium">
               <CheckCircle2 size={13} /> {t('common.saved')}
             </span>
           )}
@@ -367,19 +367,19 @@ export function PromptEditorPage() {
             <>
               <button
                 onClick={handleGenerate}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg text-xs font-medium transition-colors"
               >
                 <RefreshCw size={12} /> {t('prompt_editor.btn_regenerate')}
               </button>
               <button
                 onClick={handleSave}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
               >
                 <Save size={12} /> {t('prompt_editor.btn_save')}
               </button>
               <button
                 onClick={() => setShowSim(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-medium hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg text-xs font-medium transition-colors"
               >
                 <MessageSquare size={12} /> {t('prompt_editor.btn_simulation')}
               </button>
@@ -389,7 +389,7 @@ export function PromptEditorPage() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               <Sparkles size={14} /> {t('prompt_editor.btn_generate')}
             </button>
@@ -397,7 +397,7 @@ export function PromptEditorPage() {
           {genState === 'generating' && (
             <button
               onClick={() => { abortRef.current?.abort(); setGenState('error') }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-300 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors"
             >
               {t('prompt_editor.btn_stop')}
             </button>
@@ -406,7 +406,7 @@ export function PromptEditorPage() {
       </div>
 
       {errorMsg && (
-        <div className="flex items-center gap-2 px-6 py-2.5 bg-red-50 border-b border-red-200 text-red-700 text-sm">
+        <div className="flex items-center gap-2 px-6 py-2.5 bg-red-50 border-b border-red-100 text-red-700 text-sm">
           <AlertCircle size={14} />
           {errorMsg}
         </div>
@@ -416,26 +416,26 @@ export function PromptEditorPage() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Left: questionnaire preview */}
-        <div className="w-[28%] border-r border-slate-200 flex flex-col overflow-hidden">
-          <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-            <FileText size={13} className="text-slate-400" />
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{t('prompt_editor.section_questionnaire')}</span>
+        <div className="w-[28%] border-r border-gray-100 flex flex-col overflow-hidden bg-white">
+          <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
+            <FileText size={13} className="text-gray-400" />
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('prompt_editor.section_questionnaire')}</span>
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             {loading ? (
-              <div className="text-slate-400 text-sm">{t('common.loading')}</div>
+              <div className="text-gray-400 text-sm">{t('common.loading')}</div>
             ) : data?.questionnaire_raw ? (
-              <pre className="text-xs text-slate-600 whitespace-pre-wrap font-mono leading-relaxed">
+              <pre className="text-xs text-gray-600 whitespace-pre-wrap font-mono leading-relaxed">
                 {data.questionnaire_raw}
               </pre>
             ) : data?.has_file ? (
-              <div className="text-center py-12 text-slate-400">
+              <div className="text-center py-12 text-gray-400">
                 <FileText size={32} className="mx-auto mb-3 opacity-40" />
                 <p className="text-sm">{t('prompt_editor.pdf_note')}</p>
                 <p className="text-xs mt-1">{t('prompt_editor.pdf_direct')}</p>
               </div>
             ) : (
-              <div className="text-center py-12 text-slate-400">
+              <div className="text-center py-12 text-gray-400">
                 <p className="text-sm">{t('prompt_editor.no_file')}</p>
               </div>
             )}
@@ -443,26 +443,26 @@ export function PromptEditorPage() {
         </div>
 
         {/* Center: prompt editor */}
-        <div className="flex-1 border-r border-slate-200 flex flex-col overflow-hidden">
-          <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div className="flex-1 border-r border-gray-100 flex flex-col overflow-hidden bg-white">
+          <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles size={13} className="text-purple-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{t('prompt_editor.section_prompt')}</span>
+              <Sparkles size={13} className="text-indigo-500" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('prompt_editor.section_prompt')}</span>
             </div>
             <div className="flex items-center gap-3">
               {displayPrompt && (
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-gray-400">
                   {lineCount}{t('prompt_editor.lines')} · {charCount.toLocaleString()}{t('prompt_editor.chars')}
                 </span>
               )}
               {(genState === 'done' || genState === 'saved') && sections.length > 0 && (
-                <div className="flex items-center bg-slate-200 rounded-md p-0.5">
+                <div className="flex items-center bg-gray-100 rounded-md p-0.5">
                   <button
                     onClick={switchToSections}
                     title={t('prompt_editor.view_sections')}
                     className={cn(
                       'flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium transition-colors',
-                      viewMode === 'sections' ? 'bg-white text-slate-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      viewMode === 'sections' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
                     )}
                   >
                     <LayoutList size={11} /> {t('prompt_editor.view_sections')}
@@ -472,7 +472,7 @@ export function PromptEditorPage() {
                     title={t('prompt_editor.view_raw')}
                     className={cn(
                       'flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium transition-colors',
-                      viewMode === 'raw' ? 'bg-white text-slate-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      viewMode === 'raw' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
                     )}
                   >
                     <AlignJustify size={11} /> {t('prompt_editor.view_raw')}
@@ -484,15 +484,15 @@ export function PromptEditorPage() {
 
           {/* Generation progress */}
           {genState === 'generating' && (
-            <div className="flex flex-col items-center justify-center flex-1 gap-4 text-slate-500">
-              <div className="flex items-center gap-2 text-purple-600">
-                <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="flex flex-col items-center justify-center flex-1 gap-4 text-gray-500">
+              <div className="flex items-center gap-2 text-indigo-600">
+                <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 <span className="ml-2 text-sm font-medium">{t('prompt_editor.generating')}</span>
               </div>
-              <div className="flex flex-col items-center gap-1 text-xs text-slate-400">
-                <span className="font-mono text-lg font-semibold text-slate-600">
+              <div className="flex flex-col items-center gap-1 text-xs text-gray-400">
+                <span className="font-mono text-lg font-semibold text-gray-600">
                   {byteCount.toLocaleString()}
                 </span>
                 <span>{t('prompt_editor.bytes_received')}</span>
@@ -525,23 +525,23 @@ export function PromptEditorPage() {
                               ? <VolumeX size={10} className="inline" />
                               : idx}
                         </span>
-                        <span className="text-xs font-semibold text-slate-700">
+                        <span className="text-xs font-semibold text-gray-700">
                           {label}
                         </span>
                         {isGreeting && (
-                          <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
                             {t('prompt_editor.greeting_badge')}
                           </span>
                         )}
                         {isFailureMsg && (
-                          <span className="text-[10px] text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded">
                             {t('prompt_editor.failure_message_badge')}
                           </span>
                         )}
                       </div>
                       <ChevronDown
                         size={13}
-                        className={cn('text-slate-400 transition-transform flex-shrink-0', section.collapsed && '-rotate-90')}
+                        className={cn('text-gray-400 transition-transform flex-shrink-0', section.collapsed && '-rotate-90')}
                       />
                     </button>
                     {!section.collapsed && (
@@ -551,7 +551,7 @@ export function PromptEditorPage() {
                           onChange={e => handleSectionChange(idx, e.target.value)}
                           rows={isSpecial ? Math.min(6, Math.max(2, section.content.split('\n').length + 1)) : rowCount}
                           spellCheck={false}
-                          className="w-full resize-none p-3 font-mono text-xs text-slate-700 leading-relaxed focus:outline-none bg-slate-50 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className="w-full resize-none p-3 font-mono text-xs text-gray-700 leading-relaxed focus:outline-none bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                         />
                       </div>
                     )}
@@ -565,7 +565,7 @@ export function PromptEditorPage() {
           {genState !== 'generating' && viewMode === 'raw' && (
             <div className="flex-1 relative overflow-hidden">
               {genState === 'idle' && !prompt && (
-                <div className="absolute inset-0 flex items-center justify-center text-slate-300 pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center text-gray-300 pointer-events-none">
                   <div className="text-center">
                     <Sparkles size={40} className="mx-auto mb-3 opacity-30" />
                     <p className="text-sm">{t('prompt_editor.placeholder_generate')}</p>
@@ -577,18 +577,18 @@ export function PromptEditorPage() {
                 value={prompt}
                 onChange={e => setPrompt(e.target.value)}
                 placeholder=""
-                className="w-full h-full resize-none p-4 font-mono text-xs text-slate-700 leading-relaxed focus:outline-none bg-white"
+                className="w-full h-full resize-none p-4 bg-gray-50 border border-gray-200 rounded-lg font-mono text-xs text-gray-700 leading-relaxed focus:outline-none"
                 spellCheck={false}
               />
             </div>
           )}
 
           {(genState === 'done' || genState === 'saved') && (
-            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 border-t border-blue-100">
-              <p className="text-xs text-blue-600">{t('prompt_editor.save_hint')}</p>
+            <div className="flex items-center justify-between px-4 py-3 bg-indigo-50 border-t border-indigo-100">
+              <p className="text-xs text-indigo-600">{t('prompt_editor.save_hint')}</p>
               <Link
                 to={`/surveys/${id}/quotas`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
               >
                 {t('prompt_editor.to_quota')}
               </Link>
@@ -597,22 +597,22 @@ export function PromptEditorPage() {
         </div>
 
         {/* Right: Structured Output Schema */}
-        <div className="w-[28%] flex flex-col overflow-hidden">
-          <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div className="w-[28%] flex flex-col overflow-hidden bg-white">
+          <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Database size={13} className="text-emerald-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{t('prompt_editor.section_schema')}</span>
+              <Database size={13} className="text-emerald-600" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('prompt_editor.section_schema')}</span>
             </div>
             <div className="flex items-center gap-2">
               {schemaSaved && (
-                <span className="flex items-center gap-1 text-green-600 text-[10px] font-medium">
+                <span className="flex items-center gap-1 text-emerald-600 text-[10px] font-medium">
                   <CheckCircle2 size={11} /> {t('common.saved')}
                 </span>
               )}
               {schema && (
                 <button
                   onClick={handleVarAdd}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded text-[10px] font-medium hover:bg-emerald-100 transition-colors"
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded text-[10px] font-medium transition-colors"
                 >
                   <Plus size={10} /> {t('prompt_editor.btn_add_var')}
                 </button>
@@ -622,15 +622,15 @@ export function PromptEditorPage() {
 
           <div className="flex-1 overflow-y-auto">
             {schemaExtracting && !schema && (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400">
+              <div className="flex flex-col items-center justify-center h-full text-gray-400">
                 <Loader2 size={24} className="animate-spin mb-2 text-emerald-500" />
                 <p className="text-xs">{t('prompt_editor.schema_extracting')}</p>
-                <p className="text-[10px] mt-1 text-slate-300">{t('prompt_editor.schema_extracting_sub')}</p>
+                <p className="text-[10px] mt-1 text-gray-300">{t('prompt_editor.schema_extracting_sub')}</p>
               </div>
             )}
 
             {!schemaExtracting && !schema && (
-              <div className="flex flex-col items-center justify-center h-full text-slate-300">
+              <div className="flex flex-col items-center justify-center h-full text-gray-300">
                 <Database size={32} className="mb-3 opacity-40" />
                 <p className="text-xs">{t('prompt_editor.schema_placeholder')}</p>
               </div>
@@ -639,20 +639,20 @@ export function PromptEditorPage() {
             {schema && !editingVar && (
               <div className="p-3 space-y-2">
                 {Object.entries(schema).map(([key, variable]) => (
-                  <div key={key} className="bg-white border border-slate-200 rounded-lg p-3 group">
+                  <div key={key} className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm group">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                          <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">
                             {key}
                           </span>
-                          <span className="text-[10px] text-slate-400 font-mono">{variable.type}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{variable.type}</span>
                         </div>
-                        <p className="text-xs text-slate-600 truncate">{variable.description}</p>
+                        <p className="text-xs text-gray-600 truncate">{variable.description}</p>
                         {Object.keys(variable.codes).length > 0 && (
                           <div className="mt-1.5 flex flex-wrap gap-1">
                             {Object.entries(variable.codes).map(([code, label]) => (
-                              <span key={code} className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">
+                              <span key={code} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
                                 {code}={label}
                               </span>
                             ))}
@@ -662,13 +662,13 @@ export function PromptEditorPage() {
                       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                         <button
                           onClick={() => setEditingVar({ key, original: key, value: { ...variable, codes: { ...variable.codes } } })}
-                          className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                          className="p-1 text-gray-400 hover:text-indigo-600 transition-colors"
                         >
                           <Pencil size={11} />
                         </button>
                         <button
                           onClick={() => handleVarDelete(key)}
-                          className="p-1 text-slate-400 hover:text-red-500 transition-colors"
+                          className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                         >
                           <X size={11} />
                         </button>
@@ -791,57 +791,57 @@ function SimulationModal({ surveyId, greeting, failureMessage, onClose }: { surv
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl h-[78vh] flex flex-col" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 flex-shrink-0">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center">
-              <MessageSquare size={13} className="text-emerald-600" />
+            <div className="w-7 h-7 rounded-full bg-indigo-50 flex items-center justify-center">
+              <MessageSquare size={13} className="text-indigo-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-800">{t('simulation.title')}</p>
-              <p className="text-[10px] text-slate-400">{t('simulation.subtitle')}</p>
+              <p className="text-sm font-semibold text-gray-900">{t('simulation.title')}</p>
+              <p className="text-[10px] text-gray-400">{t('simulation.subtitle')}</p>
               {failureMessage && (
-                <p className="text-[10px] text-rose-500 mt-0.5 flex items-center gap-1">
+                <p className="text-[10px] text-red-500 mt-0.5 flex items-center gap-1">
                   <VolumeX size={9} className="inline flex-shrink-0" />
                   {failureMessage}
                 </p>
               )}
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X size={16} />
           </button>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gray-50">
           {messages.map((msg, i) => (
             <div key={i} className={cn('flex items-end gap-2', msg.role === 'user' ? 'justify-end' : 'justify-start')}>
               {msg.role === 'assistant' && (
-                <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <Bot size={13} className="text-blue-600" />
+                <div className="w-7 h-7 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                  <Bot size={13} className="text-indigo-600" />
                 </div>
               )}
               <div className={cn(
                 'max-w-[82%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap',
-                msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-sm' : 'bg-slate-100 text-slate-800 rounded-bl-sm',
+                msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white text-gray-900 border border-gray-100 rounded-bl-sm',
               )}>
                 {msg.content === '' ? (
                   <span className="inline-flex items-center gap-1 py-0.5">
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </span>
                 ) : msg.content}
               </div>
               {msg.role === 'user' && (
-                <div className="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
-                  <User size={13} className="text-slate-600" />
+                <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <User size={13} className="text-gray-500" />
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        <div className="border-t border-slate-200 px-4 py-3 flex-shrink-0">
+        <div className="border-t border-gray-100 px-4 py-3 flex-shrink-0 bg-white">
           <div className="flex gap-2">
             <input
               value={input}
@@ -849,18 +849,18 @@ function SimulationModal({ surveyId, greeting, failureMessage, onClose }: { surv
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
               disabled={streaming}
               placeholder={streaming ? t('simulation.placeholder_waiting') : t('simulation.placeholder')}
-              className="flex-1 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-400 transition-all"
+              className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 transition-all"
               autoFocus
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || streaming}
-              className="w-10 h-10 flex items-center justify-center bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+              className="w-10 h-10 flex items-center justify-center bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
             >
               <Send size={15} />
             </button>
           </div>
-          <p className="text-[10px] text-slate-400 mt-1.5 pl-1">{t('simulation.hint')}</p>
+          <p className="text-[10px] text-gray-400 mt-1.5 pl-1">{t('simulation.hint')}</p>
         </div>
       </div>
     </div>
@@ -895,18 +895,18 @@ function VarEditor({
   return (
     <div className="p-3 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-700">{t('prompt_editor.var_editor_title')}</span>
-        <button onClick={onCancel} className="text-slate-400 hover:text-slate-600"><X size={13} /></button>
+        <span className="text-xs font-semibold text-gray-700">{t('prompt_editor.var_editor_title')}</span>
+        <button onClick={onCancel} className="text-gray-400 hover:text-gray-600"><X size={13} /></button>
       </div>
       <div>
-        <label className="block text-[10px] font-medium text-slate-500 mb-1">{t('prompt_editor.label_var_name')}</label>
+        <label className="block text-[10px] font-medium text-gray-400 mb-1">{t('prompt_editor.label_var_name')}</label>
         <input value={editing.key} onChange={e => onChange({ ...editing, key: e.target.value })}
-          className="w-full border border-slate-300 rounded px-2 py-1 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Q1" />
+          className="w-full border border-gray-200 rounded px-2 py-1 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Q1" />
       </div>
       <div>
-        <label className="block text-[10px] font-medium text-slate-500 mb-1">{t('prompt_editor.label_type')}</label>
+        <label className="block text-[10px] font-medium text-gray-400 mb-1">{t('prompt_editor.label_type')}</label>
         <select value={editing.value.type} onChange={e => onChange({ ...editing, value: { ...editing.value, type: e.target.value } })}
-          className="w-full border border-slate-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          className="w-full border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500">
           <option value="integer|null">integer|null</option>
           <option value="boolean|null">boolean|null</option>
           <option value="boolean">boolean</option>
@@ -915,38 +915,38 @@ function VarEditor({
         </select>
       </div>
       <div>
-        <label className="block text-[10px] font-medium text-slate-500 mb-1">{t('prompt_editor.label_desc')}</label>
+        <label className="block text-[10px] font-medium text-gray-400 mb-1">{t('prompt_editor.label_desc')}</label>
         <input value={editing.value.description} onChange={e => onChange({ ...editing, value: { ...editing.value, description: e.target.value } })}
-          className="w-full border border-slate-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          className="w-full border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
           placeholder={t('prompt_editor.placeholder_desc')} />
       </div>
       <div>
-        <label className="block text-[10px] font-medium text-slate-500 mb-1">{t('prompt_editor.label_codes')}</label>
+        <label className="block text-[10px] font-medium text-gray-400 mb-1">{t('prompt_editor.label_codes')}</label>
         <div className="space-y-1 mb-2">
           {Object.entries(editing.value.codes).map(([k, v]) => (
             <div key={k} className="flex items-center gap-1.5">
-              <span className="font-mono text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 w-8 text-center">{k}</span>
-              <span className="text-[10px] text-slate-600 flex-1">{v}</span>
-              <button onClick={() => removeCode(k)} className="text-slate-300 hover:text-red-400"><X size={10} /></button>
+              <span className="font-mono text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 w-8 text-center">{k}</span>
+              <span className="text-[10px] text-gray-600 flex-1">{v}</span>
+              <button onClick={() => removeCode(k)} className="text-gray-300 hover:text-red-400"><X size={10} /></button>
             </div>
           ))}
         </div>
         <div className="flex gap-1">
           <input value={newCodeKey} onChange={e => setNewCodeKey(e.target.value)} placeholder={t('prompt_editor.placeholder_code')}
-            className="w-12 border border-slate-300 rounded px-1.5 py-1 text-[10px] font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-12 border border-gray-200 rounded px-1.5 py-1 text-[10px] font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
             onKeyDown={e => e.key === 'Enter' && addCode()} />
           <input value={newCodeVal} onChange={e => setNewCodeVal(e.target.value)} placeholder={t('prompt_editor.placeholder_label')}
-            className="flex-1 border border-slate-300 rounded px-1.5 py-1 text-[10px] focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="flex-1 border border-gray-200 rounded px-1.5 py-1 text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-500"
             onKeyDown={e => e.key === 'Enter' && addCode()} />
-          <button onClick={addCode} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[10px] hover:bg-slate-200">+</button>
+          <button onClick={addCode} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-[10px] hover:bg-gray-200">+</button>
         </div>
       </div>
       <div className="flex gap-2 pt-1">
-        <button onClick={onCancel} className="flex-1 py-1.5 border border-slate-300 text-slate-600 rounded text-xs hover:bg-slate-50">
+        <button onClick={onCancel} className="flex-1 py-1.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded text-xs">
           {t('common.cancel')}
         </button>
         <button onClick={() => onSave(editing)} disabled={!editing.key.trim()}
-          className="flex-1 py-1.5 bg-emerald-600 text-white rounded text-xs hover:bg-emerald-700 disabled:opacity-40">
+          className="flex-1 py-1.5 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700 disabled:opacity-40">
           {t('common.save')}
         </button>
       </div>

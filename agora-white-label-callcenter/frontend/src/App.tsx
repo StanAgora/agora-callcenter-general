@@ -1,5 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import { LoginPage } from './pages/auth/LoginPage'
+import { isAuthenticated } from './lib/auth'
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  return isAuthenticated() ? <>{children}</> : <Navigate to="/login" replace />
+}
 import { SurveyListPage } from './pages/surveys/SurveyListPage'
 import { NewSurveyPage } from './pages/surveys/NewSurveyPage'
 import { PromptEditorPage } from './pages/surveys/PromptEditorPage'
@@ -20,8 +26,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          <Route index element={<Navigate to="/campaigns" replace />} />
+          <Route path="campaigns" element={<CampaignsPage />} />
           <Route path="campaigns/:id/agent-prompt" element={<CampaignAgentPromptPage />} />
           <Route path="campaigns/:id" element={<CampaignDetailPage />} />
           <Route path="campaigns/:id/quota-insight" element={<QuotaInsightPage />} />

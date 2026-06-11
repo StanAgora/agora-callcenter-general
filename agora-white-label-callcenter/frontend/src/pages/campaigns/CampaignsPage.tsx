@@ -28,16 +28,16 @@ interface CampaignV2Item {
   updated_at: string | null
 }
 
-// Google-palette status chips
+// Clean white minimal status chips
 const STATUS_STYLE: Record<string, { chip: string; dot?: string }> = {
-  completed:   { chip: 'bg-gblue-50  text-gblue-500  border border-gblue-100' },
-  interrupted: { chip: 'bg-gred-50   text-gred-500   border border-gred-100' },
-  interrupt:   { chip: 'bg-gred-50   text-gred-500   border border-gred-100' },
-  running:     { chip: 'bg-ggreen-50 text-ggreen-500 border border-ggreen-100', dot: 'bg-ggreen-400' },
-  scheduled:   { chip: 'bg-gblue-50  text-gblue-500  border border-gblue-100' },
-  paused:      { chip: 'bg-gyellow-50 text-gyellow-600 border border-gyellow-100' },
-  pending:     { chip: 'bg-surface   text-ink-tertiary border border-border' },
-  failed:      { chip: 'bg-gred-50   text-gred-500   border border-gred-100' },
+  completed:   { chip: 'bg-blue-50 text-blue-600 border border-blue-100' },
+  interrupted: { chip: 'bg-red-50 text-red-600 border border-red-100' },
+  interrupt:   { chip: 'bg-red-50 text-red-600 border border-red-100' },
+  running:     { chip: 'bg-emerald-50 text-emerald-700 border border-emerald-100', dot: 'bg-emerald-400' },
+  scheduled:   { chip: 'bg-blue-50 text-blue-600 border border-blue-100' },
+  paused:      { chip: 'bg-amber-50 text-amber-600 border border-amber-100' },
+  pending:     { chip: 'bg-gray-100 text-gray-500 border border-gray-200' },
+  failed:      { chip: 'bg-red-50 text-red-600 border border-red-100' },
 }
 
 export function CampaignsPage() {
@@ -114,16 +114,16 @@ export function CampaignsPage() {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Page header — Google style top bar */}
-      <div className="bg-white border-b border-border px-6 py-4 flex items-center justify-between flex-shrink-0">
+    <div className="h-full flex flex-col bg-gray-50">
+      {/* Page header */}
+      <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-lg font-medium text-ink">{t('agora.list_title')}</h1>
-          <p className="text-sm text-ink-tertiary mt-0.5">{t('agora.list_subtitle')}</p>
+          <h1 className="text-lg font-medium text-gray-900">{t('agora.list_title')}</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{t('agora.list_subtitle')}</p>
         </div>
         <Link
           to="/surveys/new"
-          className="inline-flex items-center gap-2 bg-gblue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gblue-600 transition-colors shadow-fab"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
         >
           <Plus size={16} strokeWidth={2.5} />
           {t('nav.new_campaign')}
@@ -133,28 +133,29 @@ export function CampaignsPage() {
       {/* Content */}
       <div className="flex-1 overflow-auto p-6">
         {loading && (
-          <div className="flex items-center justify-center py-24 text-ink-tertiary">
-            <Loader2 size={20} className="animate-spin mr-2 text-gblue-500" />
+          <div className="flex items-center justify-center py-24 text-gray-400">
+            <Loader2 size={20} className="animate-spin mr-2 text-indigo-600" />
             <span className="text-sm">{t('agora.loading')}</span>
           </div>
         )}
 
         {error && (
-          <div className="bg-gred-50 border border-gred-100 rounded-xl p-4 text-sm text-gred-500">{error}</div>
+          <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-600">{error}</div>
         )}
 
         {!loading && !error && campaigns.length === 0 && (
-          <div className="bg-white rounded-2xl p-16 text-center shadow-card">
-            <div className="w-16 h-16 rounded-full bg-gblue-50 flex items-center justify-center mx-auto mb-4">
-              <Radio size={28} className="text-gblue-400" />
+          <div className="bg-white border border-gray-100 rounded-xl p-16 text-center shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+              <Radio size={28} className="text-indigo-600" />
             </div>
-            <p className="text-base font-medium text-ink">{t('agora.empty')}</p>
-            <p className="text-sm text-ink-tertiary mt-1">{t('agora.empty_hint')}</p>
+            <p className="text-base font-medium text-gray-900">{t('agora.empty')}</p>
+            <p className="text-sm text-gray-400 mt-1">{t('agora.empty_hint')}</p>
           </div>
         )}
 
         {!loading && !error && campaigns.length > 0 && (
-          <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="overflow-x-auto">
+          <div className="grid grid-cols-3 xl:grid-cols-5 gap-4 min-w-[640px]">
             {campaigns.map(c => {
               const status = c.status ?? 'pending'
               const isTerminal = status === 'completed' || status === 'interrupted' || status === 'interrupt' || status === 'failed'
@@ -166,16 +167,16 @@ export function CampaignsPage() {
               return (
                 <div
                   key={c.campaign_id}
-                  className="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-shadow flex flex-col overflow-hidden"
+                  className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
                 >
-                  {/* Colored top accent strip */}
-                  <div className="h-1" style={{
+                  {/* Subtle top accent strip */}
+                  <div className="h-0.5" style={{
                     backgroundColor:
-                      status === 'running'     ? '#34A853' :
-                      status === 'completed'   ? '#1a73e8' :
-                      status === 'paused'      ? '#FBBC04' :
+                      status === 'running'     ? '#059669' :
+                      status === 'completed'   ? '#4F46E5' :
+                      status === 'paused'      ? '#D97706' :
                       (status === 'interrupted' || status === 'interrupt' || status === 'failed')
-                                               ? '#EA4335' : '#E8EAED',
+                                               ? '#DC2626' : '#E5E7EB',
                   }} />
 
                   {/* Card header */}
@@ -197,8 +198,8 @@ export function CampaignsPage() {
                         className={cn(
                           'flex items-center justify-center w-7 h-7 rounded-full transition-colors',
                           isTerminal
-                            ? 'text-ink-disabled cursor-not-allowed'
-                            : 'text-gred-500 hover:bg-gred-50'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-red-500 hover:bg-red-50'
                         )}
                       >
                         {interruptingId === c.campaign_id
@@ -207,38 +208,38 @@ export function CampaignsPage() {
                       </button>
                     </div>
 
-                    <h2 className="font-medium text-ink text-sm leading-snug line-clamp-2 mb-0.5">
+                    <h2 className="font-medium text-gray-900 text-sm leading-snug line-clamp-2 mb-0.5">
                       {c.campaign_name}
                     </h2>
-                    <p className="text-xs font-mono text-ink-disabled truncate">{c.campaign_id}</p>
+                    <p className="text-xs font-mono text-gray-400 truncate">{c.campaign_id}</p>
                   </div>
 
                   {/* Chips row */}
                   <div className="px-5 pb-3 flex items-center gap-1.5 flex-wrap">
                     {c.questionnaire_type && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gpurple-50 text-gpurple-500 border border-gpurple-100">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600 border border-indigo-100">
                         {campaignAgentSourceLabel(t, c.questionnaire_type)}
                       </span>
                     )}
                     {c.quota_mode && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gteal-50 text-gteal-500 border border-gteal-50">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 border border-blue-100">
                         {campaignQuotaModeLabel(t, c.quota_mode)}
                       </span>
                     )}
                   </div>
 
                   {/* Info */}
-                  <div className="px-5 pb-3 space-y-1 text-sm text-ink-secondary">
+                  <div className="px-5 pb-3 space-y-1 text-sm text-gray-600">
                     {c.phone_number && (
                       <p className="flex items-center gap-2 text-xs">
-                        <span className="text-ink-tertiary">Caller</span>
-                        <span className="font-mono font-medium text-ink">{c.phone_number}</span>
+                        <span className="text-gray-400">Caller</span>
+                        <span className="font-mono font-medium text-gray-900">{c.phone_number}</span>
                       </p>
                     )}
                     {c.agent_name && (
                       <p className="flex items-center gap-2 text-xs">
-                        <span className="text-ink-tertiary">Agent</span>
-                        <span className="font-medium text-ink">{c.agent_name}</span>
+                        <span className="text-gray-400">Agent</span>
+                        <span className="font-medium text-gray-900">{c.agent_name}</span>
                       </p>
                     )}
                   </div>
@@ -246,44 +247,44 @@ export function CampaignsPage() {
                   {/* Progress */}
                   <div className="px-5 pb-4">
                     <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-ink-tertiary">{t('agora.dial_progress')}</span>
+                      <span className="text-gray-400">{t('agora.dial_progress')}</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-ink-secondary">{done} / {total}</span>
+                        <span className="font-mono text-gray-600">{done} / {total}</span>
                         <span className={cn(
                           'font-semibold',
-                          pct >= 100 ? 'text-ggreen-500' : 'text-gblue-500'
+                          pct >= 100 ? 'text-emerald-600' : 'text-indigo-600'
                         )}>{pct}%</span>
                       </div>
                     </div>
-                    <div className="h-2.5 w-full rounded-full overflow-hidden" style={{ backgroundColor: '#E8EAED' }}>
+                    <div className="h-2 w-full rounded-full overflow-hidden bg-gray-100">
                       <div
                         className="h-full rounded-full transition-all duration-300"
                         style={{
                           width: `${Math.max(pct, pct > 0 ? 2 : 0)}%`,
-                          backgroundColor: pct >= 100 ? '#34A853' : '#1a73e8',
+                          backgroundColor: pct >= 100 ? '#059669' : '#4F46E5',
                         }}
                       />
                     </div>
-                    <p className="text-[11px] text-ink-disabled mt-2">{formatDate(c.created_at)}</p>
+                    <p className="text-[11px] text-gray-400 mt-2">{formatDate(c.created_at)}</p>
                   </div>
 
                   {/* Actions footer */}
-                  <div className="border-t border-border-light grid grid-cols-3">
+                  <div className="border-t border-gray-100 grid grid-cols-3">
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-ink-secondary hover:bg-gblue-50 hover:text-gblue-500 transition-colors border-r border-border-light"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
                     >
                       <LayoutDashboard size={13} /> Dashboard
                     </button>
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}/quota-insight`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-ink-secondary hover:bg-ggreen-50 hover:text-ggreen-500 transition-colors border-r border-border-light"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors border-r border-gray-100"
                     >
                       <PieChart size={13} /> Quota
                     </button>
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}/agent-prompt`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-ink-secondary hover:bg-gpurple-50 hover:text-gpurple-500 transition-colors"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                     >
                       <Bot size={13} /> Prompt
                     </button>
@@ -291,6 +292,7 @@ export function CampaignsPage() {
                 </div>
               )
             })}
+          </div>
           </div>
         )}
       </div>

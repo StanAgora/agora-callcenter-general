@@ -202,11 +202,11 @@ function Modal({ title, onClose, children, wide = false }: {
   title: string; onClose: () => void; children: React.ReactNode; wide?: boolean
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
       <div className={cn('bg-white rounded-2xl shadow-xl flex flex-col max-h-[92vh]', wide ? 'w-full max-w-3xl' : 'w-full max-w-lg')}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 flex-shrink-0">
-          <h2 className="font-semibold text-slate-900">{title}</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+          <h2 className="font-semibold text-gray-900">{title}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors"><X size={18} /></button>
         </div>
         {children}
       </div>
@@ -229,7 +229,6 @@ function SectionHeader({ color, title, open, toggle }: {
   )
 }
 
-/** 编辑侧栏：ASR / 参数等分组 — 带图标、说明与左强调色 */
 function SettingsSectionCard({
   title,
   description,
@@ -252,7 +251,7 @@ function SettingsSectionCard({
   return (
     <div
       className={cn(
-        'rounded-xl border border-slate-200/90 bg-white shadow-sm overflow-hidden',
+        'rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden',
         'border-l-4',
         accentBar,
       )}
@@ -260,27 +259,27 @@ function SettingsSectionCard({
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center gap-3 px-3.5 py-3.5 text-left transition-colors hover:bg-slate-50/90"
+        className="w-full flex items-center gap-3 px-3.5 py-3.5 text-left transition-colors hover:bg-gray-50"
       >
         <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', iconWrap)}>
           <Icon className="h-4 w-4" strokeWidth={2} />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-sm font-semibold text-slate-900 leading-tight">
+          <div className="text-sm font-semibold text-gray-900 leading-tight">
             {title}
           </div>
-          <div className="text-xs text-slate-500 mt-1 leading-snug">
+          <div className="text-xs text-gray-500 mt-1 leading-snug">
             {description}
           </div>
         </div>
         {open ? (
-          <ChevronDown className="shrink-0 text-slate-400" size={18} />
+          <ChevronDown className="shrink-0 text-gray-400" size={18} />
         ) : (
-          <ChevronRight className="shrink-0 text-slate-400" size={18} />
+          <ChevronRight className="shrink-0 text-gray-400" size={18} />
         )}
       </button>
       {open && (
-        <div className="px-3.5 pb-3.5 border-t border-slate-100/90">
+        <div className="px-3.5 pb-3.5 border-t border-gray-100">
           <div className="pt-3">
             {children}
           </div>
@@ -294,7 +293,7 @@ function Field({ label, sensitive, children }: { label: string; sensitive?: bool
   const { t } = useTranslation()
   return (
     <div>
-      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1">
+      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1">
         {label}
         {sensitive && (
           <span className="px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-medium">
@@ -307,7 +306,6 @@ function Field({ label, sensitive, children }: { label: string; sensitive?: bool
   )
 }
 
-/** LLM: System Prompt、Greeting、Failure — 统一为带标题条与柔和边框的块 */
 function LlmPromptBlock({
   kind,
   value,
@@ -332,20 +330,20 @@ function LlmPromptBlock({
       className={cn(
         'overflow-hidden rounded-xl border shadow-sm transition-shadow focus-within:shadow-md',
         isSystem
-          ? 'border-indigo-200/90 bg-gradient-to-b from-indigo-50/40 to-white focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-500/15'
+          ? 'border-indigo-200 bg-white focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-500/15'
           : isGreeting
-            ? 'border-emerald-200/90 bg-gradient-to-b from-emerald-50/40 to-white focus-within:border-emerald-300 focus-within:ring-2 focus-within:ring-emerald-500/15'
-            : 'border-rose-200/90 bg-gradient-to-b from-rose-50/40 to-white focus-within:border-rose-300 focus-within:ring-2 focus-within:ring-rose-500/15',
+            ? 'border-emerald-200 bg-white focus-within:border-emerald-300 focus-within:ring-2 focus-within:ring-emerald-500/15'
+            : 'border-red-200 bg-white focus-within:border-red-300 focus-within:ring-2 focus-within:ring-red-500/15',
       )}
     >
       <div
         className={cn(
           'flex items-center gap-2 border-b px-3 py-2',
           isSystem
-            ? 'border-indigo-100/80 bg-indigo-50/50'
+            ? 'border-indigo-100 bg-indigo-50'
             : isGreeting
-              ? 'border-emerald-100/80 bg-emerald-50/50'
-              : 'border-rose-100/80 bg-rose-50/50',
+              ? 'border-emerald-100 bg-emerald-50'
+              : 'border-red-100 bg-red-50',
         )}
       >
         {isSystem ? (
@@ -353,12 +351,12 @@ function LlmPromptBlock({
         ) : isGreeting ? (
           <MessageCircle className="h-4 w-4 flex-shrink-0 text-emerald-600" />
         ) : (
-          <AlertCircle className="h-4 w-4 flex-shrink-0 text-rose-600" />
+          <AlertCircle className="h-4 w-4 flex-shrink-0 text-red-600" />
         )}
-        <p className="min-w-0 flex-1 text-xs font-semibold leading-snug text-slate-800">
+        <p className="min-w-0 flex-1 text-xs font-semibold leading-snug text-gray-800">
           {isSystem ? 'System Prompt' : isGreeting ? 'Greeting Message' : 'Failure Message'}
           {showRequired && <span className="ml-0.5 text-red-500" aria-hidden>*</span>}
-          <span className="ml-2 font-normal text-[10px] text-slate-500">
+          <span className="ml-2 font-normal text-[10px] text-gray-500">
             {isSystem
               ? `· ${t('agents.llm_h_system')}`
               : isGreeting
@@ -372,7 +370,7 @@ function LlmPromptBlock({
         onChange={e => onChange(e.target.value)}
         rows={rows}
         className={cn(
-          'w-full resize-y border-0 bg-transparent px-3 py-2 text-sm leading-relaxed text-slate-800 placeholder:text-slate-300 focus:ring-0',
+          'w-full resize-y border-0 bg-transparent px-3 py-2 text-sm leading-relaxed text-gray-800 placeholder:text-gray-300 focus:ring-0',
           isSystem ? 'font-mono' : 'font-sans',
         )}
         placeholder={
@@ -399,7 +397,7 @@ function TextInput({ value, onChange, placeholder, mono }: {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className={cn('w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400', mono && 'font-mono')}
+      className={cn('w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white', mono && 'font-mono')}
     />
   )
 }
@@ -410,7 +408,7 @@ function NumberInput({ value, onChange }: { value: number; onChange: (v: number)
       type="number"
       value={value}
       onChange={e => onChange(Number(e.target.value))}
-      className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
     />
   )
 }
@@ -418,11 +416,11 @@ function NumberInput({ value, onChange }: { value: number; onChange: (v: number)
 function Toggle({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex items-center justify-between py-1 cursor-pointer">
-      <span className="text-sm text-slate-700">{label}</span>
+      <span className="text-sm text-gray-700">{label}</span>
       <button
         type="button"
         onClick={() => onChange(!value)}
-        className={cn('relative inline-flex h-5 w-9 items-center rounded-full transition-colors', value ? 'bg-blue-500' : 'bg-slate-200')}
+        className={cn('relative inline-flex h-5 w-9 items-center rounded-full transition-colors', value ? 'bg-indigo-600' : 'bg-gray-200')}
       >
         <span className={cn('inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform', value ? 'translate-x-4' : 'translate-x-1')} />
       </button>
@@ -481,7 +479,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
           fromPlaceholderRef.current = ''
           setEditingUncommitted(false)
         }}
-        className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
         placeholder={t('common.secret_new_ph')}
       />
     )
@@ -501,7 +499,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
           fromPlaceholderRef.current = ''
           setEditingUncommitted(false)
         }}
-        className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
       />
     )
   }
@@ -513,7 +511,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
           type="text"
           readOnly
           value={maskDisplay(value)}
-          className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-mono bg-slate-50/80 text-slate-600 cursor-not-allowed"
+          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono bg-gray-50 text-gray-500 cursor-not-allowed"
         />
         <button
           type="button"
@@ -521,7 +519,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
             setDraft('')
             setReplaceMode(true)
           }}
-          className="shrink-0 text-xs text-blue-600 hover:underline"
+          className="shrink-0 text-xs text-indigo-600 hover:underline"
         >
           {t('common.replace')}
         </button>
@@ -535,7 +533,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
       autoComplete="off"
       value={value || SENSITIVE_PLACEHOLDER}
       onChange={e => handleValueChange(e.target.value)}
-      className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400"
+      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
       placeholder={t('common.secret_keep_ph')}
     />
   )
@@ -554,7 +552,7 @@ export function PropsEditor({ form, onChange }: {
     <div className="space-y-3">
       {/* ── LLM ── */}
       <div>
-        <SectionHeader color="bg-blue-50 text-blue-700 hover:bg-blue-100" title="LLM" open={open.llm} toggle={() => toggle('llm')} />
+        <SectionHeader color="bg-indigo-50 text-indigo-700 hover:bg-indigo-100" title="LLM" open={open.llm} toggle={() => toggle('llm')} />
         {open.llm && (
           <div className="mt-2 space-y-2.5 pl-1">
             <LlmPromptBlock
@@ -595,7 +593,7 @@ export function PropsEditor({ form, onChange }: {
 
       {/* ── TTS ── */}
       <div>
-        <SectionHeader color="bg-purple-50 text-purple-700 hover:bg-purple-100" title="TTS" open={open.tts} toggle={() => toggle('tts')} />
+        <SectionHeader color="bg-gray-50 text-gray-700 hover:bg-gray-100" title="TTS" open={open.tts} toggle={() => toggle('tts')} />
         {open.tts && (
           <div className="mt-2 space-y-3 pl-1">
             <div className="grid grid-cols-2 gap-3">
@@ -654,8 +652,8 @@ export function PropsEditor({ form, onChange }: {
         open={open.params}
         onToggle={() => toggle('params')}
         icon={SlidersHorizontal}
-        accentBar="border-l-orange-500"
-        iconWrap="bg-orange-50 text-orange-700"
+        accentBar="border-l-amber-500"
+        iconWrap="bg-amber-50 text-amber-700"
       >
         <div className="space-y-3 pl-0.5">
           <div className="grid grid-cols-2 gap-3">
@@ -674,7 +672,7 @@ export function PropsEditor({ form, onChange }: {
               <TextInput value={form.audio_scenario} onChange={v => onChange({ audio_scenario: v })} />
             </Field>
           </div>
-          <div className="border border-slate-100 rounded-lg px-3 py-1.5 space-y-0.5 bg-slate-50/40">
+          <div className="border border-gray-100 rounded-lg px-3 py-1.5 space-y-0.5 bg-gray-50">
             <Toggle label="Enable Dump" value={form.enable_dump} onChange={v => onChange({ enable_dump: v })} />
             <Toggle label="Enable Metrics" value={form.enable_metrics} onChange={v => onChange({ enable_metrics: v })} />
             <Toggle label="Enable Flexible" value={form.enable_flexible} onChange={v => onChange({ enable_flexible: v })} />
@@ -693,11 +691,11 @@ export function PropsEditor({ form, onChange }: {
         open={open.turn}
         onToggle={() => toggle('turn')}
         icon={AudioLines}
-        accentBar="border-l-cyan-500"
-        iconWrap="bg-cyan-50 text-cyan-800"
+        accentBar="border-l-blue-500"
+        iconWrap="bg-blue-50 text-blue-700"
       >
         <div className="space-y-3 pl-0.5">
-          <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Start of Speech (VAD)</p>
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Start of Speech (VAD)</p>
           <div className="grid grid-cols-3 gap-2">
             <Field label="Interrupt (ms)">
               <NumberInput value={form.interrupt_duration_ms} onChange={v => onChange({ interrupt_duration_ms: v })} />
@@ -712,7 +710,7 @@ export function PropsEditor({ form, onChange }: {
               <NumberInput value={form.prefix_padding_ms} onChange={v => onChange({ prefix_padding_ms: v })} />
             </Field>
           </div>
-          <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">End of Speech (Semantic)</p>
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">End of Speech (Semantic)</p>
           <div className="grid grid-cols-2 gap-3">
             <Field label="Silence Duration (ms)">
               <NumberInput value={form.silence_duration_ms} onChange={v => onChange({ silence_duration_ms: v })} />
@@ -730,10 +728,10 @@ export function PropsEditor({ form, onChange }: {
         open={open.adv}
         onToggle={() => toggle('adv')}
         icon={Sparkles}
-        accentBar="border-l-slate-500"
-        iconWrap="bg-slate-100 text-slate-700"
+        accentBar="border-l-gray-400"
+        iconWrap="bg-gray-100 text-gray-600"
       >
-        <div className="border border-slate-100 rounded-lg px-3 py-1.5 space-y-0.5 bg-slate-50/40">
+        <div className="border border-gray-100 rounded-lg px-3 py-1.5 space-y-0.5 bg-gray-50">
           <Toggle label="Enable RTM" value={form.enable_rtm} onChange={v => onChange({ enable_rtm: v })} />
           <Toggle label="Enable SAL" value={form.enable_sal} onChange={v => onChange({ enable_sal: v })} />
           <Toggle label="Enable Tools" value={form.enable_tools} onChange={v => onChange({ enable_tools: v })} />
@@ -871,6 +869,14 @@ export function AgentsPage() {
   }
 
   // ── Helpers ─────────────────────────────────────────────────────
+  function getLlmModel(agent: Agent): string | null {
+    try {
+      const llm = agent.properties?.llm as Record<string, unknown> | undefined
+      const params = llm?.params as Record<string, unknown> | undefined
+      return (params?.model as string) || null
+    } catch { return null }
+  }
+
   function formatDate(iso: string | null) {
     if (!iso) return '—'
     return new Date(iso).toLocaleString(bcp47ForI18n(i18n.language), {
@@ -880,7 +886,7 @@ export function AgentsPage() {
 
   function TextCell({ label, content, kind }: { label: string; content: string | null; kind: 'system' | 'greeting' }) {
     if (!content) {
-      return <span className="text-slate-300 text-xs">—</span>
+      return <span className="text-gray-300 text-xs">—</span>
     }
     const isSystem = kind === 'system'
     return (
@@ -894,21 +900,21 @@ export function AgentsPage() {
           className={cn(
             'flex items-start gap-1.5 rounded-md border py-0.5 pl-1 pr-1.5 transition-colors',
             isSystem
-              ? 'border-indigo-200/80 bg-indigo-50/30 hover:bg-indigo-50/50'
-              : 'border-emerald-200/80 bg-emerald-50/30 hover:bg-emerald-50/50',
+              ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100'
+              : 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100',
           )}
         >
           <span
             className={cn(
               'mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center self-start rounded',
-              isSystem ? 'bg-indigo-100/90 text-indigo-600' : 'bg-emerald-100/90 text-emerald-600',
+              isSystem ? 'bg-indigo-100 text-indigo-600' : 'bg-emerald-100 text-emerald-600',
             )}
           >
             {isSystem ? <FileText className="h-2.5 w-2.5" /> : <MessageCircle className="h-2.5 w-2.5" />}
           </span>
           <p
             className={cn(
-              'line-clamp-2 min-h-0 min-w-0 max-w-full flex-1 text-[11px] leading-snug text-slate-600',
+              'line-clamp-2 min-h-0 min-w-0 max-w-full flex-1 text-[11px] leading-snug text-gray-600',
               isSystem && 'font-mono',
             )}
           >
@@ -920,15 +926,15 @@ export function AgentsPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 min-h-full">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Agents</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{t('agents.page_subtitle')}</p>
+          <h1 className="text-xl font-bold text-gray-900">Agents</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{t('agents.page_subtitle')}</p>
         </div>
         <button
           onClick={() => { setShowCreate(true); setCreateError('') }}
-          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
         >
           <PlusCircle size={16} />
           Create Agent
@@ -936,77 +942,113 @@ export function AgentsPage() {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center py-20 text-slate-400">
+        <div className="flex items-center justify-center py-20 text-gray-400">
           <Loader2 size={20} className="animate-spin mr-2" />
           <span className="text-sm">{t('agents.loading')}</span>
         </div>
       )}
-      {error && <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">{error}</div>}
+      {error && <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-600">{error}</div>}
 
       {!loading && !error && (
         agents.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400">
+          <div className="bg-white border border-gray-100 rounded-xl p-12 text-center text-gray-400 shadow-sm">
             <Bot size={32} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">{t('agents.empty')}</p>
             <p className="text-xs mt-1">{t('agents.empty_hint')}</p>
           </div>
         ) : (
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 uppercase tracking-wide">
-                  <th className="text-left px-4 py-3">Agent Name</th>
-                  <th className="text-left px-4 py-3">Agent ID</th>
-                  <th className="min-w-[280px] py-2.5 pl-3 pr-1.5 text-left text-xs font-medium tracking-wide text-slate-500">
-                    System Prompt
-                  </th>
-                  <th className="min-w-[280px] py-2.5 pl-1.5 pr-3 text-left text-xs font-medium tracking-wide text-slate-500">
-                    Greeting
-                  </th>
-                  <th className="text-left px-4 py-3">Voice ID</th>
-                  <th className="text-left px-4 py-3">Created At</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {agents.map(a => (
-                  <tr key={a.agent_id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-slate-800">{a.agent_name}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-400">{a.agent_id}</td>
-                    <td className="min-w-[280px] align-top py-2.5 pl-3 pr-1.5">
-                      <TextCell kind="system" label="System Prompt" content={a.system_content} />
-                    </td>
-                    <td className="min-w-[280px] align-top py-2.5 pl-1.5 pr-3">
-                      <TextCell kind="greeting" label="Greeting Message" content={a.greeting_message} />
-                    </td>
-                    <td className="px-4 py-3">
-                      {a.voice_id
-                        ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700">{a.voice_id}</span>
-                        : <span className="text-slate-300 text-xs">—</span>}
-                    </td>
-                    <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{formatDate(a.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => openPropsModal(a)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-colors"
-                        >
-                          <Pencil size={13} />Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(a.agent_id)}
-                          disabled={deletingId === a.agent_id}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-40"
-                        >
-                          {deletingId === a.agent_id ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
-                          Delete
-                        </button>
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
+            {agents.map(a => (
+              <div
+                key={a.agent_id}
+                className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+              >
+                {/* Top accent */}
+                <div className="h-0.5 bg-indigo-500" />
+
+                {/* Header */}
+                <div className="px-5 pt-4 pb-3">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                        <Bot size={16} className="text-indigo-600" />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <h3 className="font-semibold text-gray-900 text-sm leading-snug truncate">{a.agent_name}</h3>
+                    </div>
+                    {getLlmModel(a) && (
+                      <span className="flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200 font-mono">
+                        {getLlmModel(a)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] font-mono text-gray-400 truncate mt-0.5">{a.agent_id}</p>
+                </div>
+
+                {/* Prompt previews — Greeting first, then System Prompt */}
+                <div className="px-5 pb-4 space-y-2 flex-1">
+                  {a.greeting_message ? (
+                    <button
+                      type="button"
+                      onClick={() => setTextModal({ title: 'Greeting Message', content: a.greeting_message! })}
+                      className="w-full text-left group"
+                    >
+                      <div className="flex items-start gap-1.5 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-2 hover:bg-emerald-100 transition-colors">
+                        <MessageCircle size={12} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <p className="text-[11px] text-gray-600 line-clamp-2 leading-snug">{a.greeting_message}</p>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-gray-50 px-2.5 py-2">
+                      <MessageCircle size={12} className="text-gray-300 flex-shrink-0" />
+                      <p className="text-[11px] text-gray-300">No greeting message</p>
+                    </div>
+                  )}
+
+                  {a.system_content ? (
+                    <button
+                      type="button"
+                      onClick={() => setTextModal({ title: 'System Prompt', content: a.system_content! })}
+                      className="w-full text-left group"
+                    >
+                      <div className="flex items-start gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-2.5 py-2 hover:bg-indigo-100 transition-colors">
+                        <FileText size={12} className="text-indigo-500 mt-0.5 flex-shrink-0" />
+                        <p className="text-[11px] font-mono text-gray-600 line-clamp-2 leading-snug">{a.system_content}</p>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-gray-50 px-2.5 py-2">
+                      <FileText size={12} className="text-gray-300 flex-shrink-0" />
+                      <p className="text-[11px] text-gray-300">No system prompt</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer */}
+                <div className="px-5 pb-3">
+                  <p className="text-[11px] text-gray-400">{formatDate(a.created_at)}</p>
+                </div>
+
+                {/* Actions */}
+                <div className="border-t border-gray-100 grid grid-cols-2">
+                  <button
+                    onClick={() => openPropsModal(a)}
+                    className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
+                  >
+                    <Pencil size={13} /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(a.agent_id)}
+                    disabled={deletingId === a.agent_id}
+                    className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-40"
+                  >
+                    {deletingId === a.agent_id
+                      ? <Loader2 size={13} className="animate-spin" />
+                      : <Trash2 size={13} />}
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )
       )}
@@ -1015,8 +1057,8 @@ export function AgentsPage() {
       {textModal && (
         <Modal title={textModal.title} onClose={() => setTextModal(null)}>
           <div className="px-6 py-5 overflow-y-auto">
-            <div className="rounded-xl border border-slate-200/90 bg-slate-50/50 p-4">
-              <pre className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-700 font-sans">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <pre className="whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-700 font-sans">
                 {textModal.content}
               </pre>
             </div>
@@ -1027,8 +1069,8 @@ export function AgentsPage() {
       {/* ── Properties GUI modal ───────────────────────────────── */}
       {propsModal && (
         <Modal title={`Edit Properties — ${propsModal.agent.agent_name}`} onClose={() => setPropsModal(null)} wide>
-          <div className="px-6 pt-3 pb-3 border-b border-slate-100 flex-shrink-0 flex items-center justify-between gap-3">
-            <p className="text-xs text-slate-400">
+          <div className="px-6 pt-3 pb-3 border-b border-gray-100 flex-shrink-0 flex items-center justify-between gap-3">
+            <p className="text-xs text-gray-400">
               <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded text-[10px] font-medium mr-1">
                 {t('common.sensitive')}
               </span>
@@ -1038,7 +1080,7 @@ export function AgentsPage() {
               onClick={handleUpdate}
               disabled={updating}
               className={cn('flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                updating ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700')}
+                updating ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}
             >
               {updating && <Loader2 size={14} className="animate-spin" />}
               {updating ? 'Updating...' : 'UPDATE'}
@@ -1061,9 +1103,9 @@ export function AgentsPage() {
         <Modal title="Create Agent" onClose={resetCreate}>
           <form onSubmit={handleCreate} className="space-y-4 overflow-y-auto px-6 py-5">
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Agent Name <span className="text-red-500">*</span></label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Agent Name <span className="text-red-500">*</span></label>
               <input type="text" value={createForm.agent_name} onChange={e => setCreateForm(f => ({ ...f, agent_name: e.target.value }))}
-                placeholder="stantest2" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                placeholder="stantest2" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
             </div>
             <LlmPromptBlock
               kind="system"
@@ -1087,18 +1129,18 @@ export function AgentsPage() {
               placeholder={t('agents.ph_failure')}
             />
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-gray-600 mb-1">
                 Voice ID{' '}
-                <span className="text-slate-400 font-normal ml-1">(ai_assistant_008)</span>
+                <span className="text-gray-400 font-normal ml-1">(ai_assistant_008)</span>
               </label>
               <input type="text" value={createForm.voice_id} onChange={e => setCreateForm(f => ({ ...f, voice_id: e.target.value }))}
-                placeholder="ai_assistant_008" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                placeholder="ai_assistant_008" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
             </div>
             {createError && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{createError}</p>}
             <div className="flex justify-end gap-2 pt-1">
-              <button type="button" onClick={resetCreate} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">Cancel</button>
+              <button type="button" onClick={resetCreate} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">Cancel</button>
               <button type="submit" disabled={submitting}
-                className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors', submitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700')}>
+                className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors', submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}>
                 {submitting && <Loader2 size={14} className="animate-spin" />}
                 {submitting ? 'Creating...' : 'Create Agent'}
               </button>

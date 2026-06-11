@@ -93,28 +93,28 @@ interface CallV2Detail {
 }
 
 const STATUS_STYLE: Record<string, string> = {
-  completed:   'bg-green-100 text-green-700',
-  interrupted: 'bg-red-100 text-red-600',
-  interrupt:   'bg-red-100 text-red-600',
-  running:     'bg-blue-100 text-blue-700',
-  scheduled:   'bg-cyan-100 text-cyan-800',
-  paused:      'bg-yellow-100 text-yellow-700',
-  pending:     'bg-slate-100 text-slate-500',
+  completed:   'bg-gray-100 text-gray-600',
+  interrupted: 'bg-red-50 text-red-600',
+  interrupt:   'bg-red-50 text-red-600',
+  running:     'bg-emerald-50 text-emerald-700',
+  scheduled:   'bg-indigo-50 text-indigo-700',
+  paused:      'bg-amber-50 text-amber-700',
+  pending:     'bg-gray-100 text-gray-500',
 }
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-3 py-2.5 border-b border-slate-100 last:border-0">
-      <span className="w-36 flex-shrink-0 text-xs text-slate-500 pt-0.5">{label}</span>
-      <span className="text-sm text-slate-800 font-mono break-all">{value ?? '—'}</span>
+    <div className="flex items-start gap-3 py-2.5 border-b border-gray-100 last:border-0">
+      <span className="w-36 flex-shrink-0 text-xs text-gray-400 pt-0.5">{label}</span>
+      <span className="text-sm text-gray-900 font-mono break-all">{value ?? '—'}</span>
     </div>
   )
 }
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4">
-      <h3 className="text-sm font-semibold text-slate-900 mb-3 pb-2 border-b border-slate-100">{title}</h3>
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+      <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">{title}</h3>
       {children}
     </div>
   )
@@ -453,13 +453,13 @@ export function CampaignDetailPage() {
   function categoryStyle(cat: string | null): { dot: string; text: string } {
     const c = (cat ?? '').toLowerCase()
     if (c.includes('answered')) return { dot: 'bg-emerald-500', text: 'text-emerald-700' }
-    if (c.includes('transferred_success') || c.includes('transfer_success')) return { dot: 'bg-green-600', text: 'text-green-700' }
-    if (c.includes('transferred_failed') || c.includes('transfer_failed')) return { dot: 'bg-rose-500', text: 'text-rose-700' }
-    if (c.includes('voicemail')) return { dot: 'bg-violet-500', text: 'text-violet-700' }
+    if (c.includes('transferred_success') || c.includes('transfer_success')) return { dot: 'bg-emerald-600', text: 'text-emerald-700' }
+    if (c.includes('transferred_failed') || c.includes('transfer_failed')) return { dot: 'bg-red-400', text: 'text-red-600' }
+    if (c.includes('voicemail')) return { dot: 'bg-indigo-400', text: 'text-indigo-600' }
     if (c.includes('no_answer') || c === 'no-answer') return { dot: 'bg-amber-500', text: 'text-amber-700' }
-    if (c.includes('failed') || c.includes('error')) return { dot: 'bg-red-500', text: 'text-red-700' }
-    if (c.includes('ai_assistant') || c.includes('ai-assistant')) return { dot: 'bg-blue-500', text: 'text-blue-700' }
-    return { dot: 'bg-slate-300', text: 'text-slate-500' }
+    if (c.includes('failed') || c.includes('error')) return { dot: 'bg-red-500', text: 'text-red-600' }
+    if (c.includes('ai_assistant') || c.includes('ai-assistant')) return { dot: 'bg-indigo-500', text: 'text-indigo-600' }
+    return { dot: 'bg-gray-300', text: 'text-gray-500' }
   }
 
   function closeModals() {
@@ -468,7 +468,7 @@ export function CampaignDetailPage() {
   }
 
   if (loading) return (
-    <div className="flex items-center justify-center py-32 text-slate-400">
+    <div className="flex items-center justify-center py-32 text-gray-400">
       <Loader2 size={20} className="animate-spin mr-2" />
       <span className="text-sm">{t('agora.loading')}</span>
     </div>
@@ -476,7 +476,7 @@ export function CampaignDetailPage() {
 
   if (error || !campaign) return (
     <div className="p-8">
-      <button onClick={() => navigate('/')} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-6">
+      <button onClick={() => navigate('/')} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6">
         <ArrowLeft size={15} /> {t('agora.back')}
       </button>
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
@@ -498,23 +498,23 @@ export function CampaignDetailPage() {
     <div className="h-full overflow-hidden">
       <div className="h-full flex flex-col">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="flex items-start justify-between gap-3 bg-white border-b border-gray-100 px-6 py-4 flex-shrink-0">
           <div className="min-w-0">
-            <button onClick={() => navigate('/')} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-2">
+            <button onClick={() => navigate('/')} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-2">
               <ArrowLeft size={15} /> {t('agora.back_list')}
             </button>
-            <h1 className="text-lg font-bold text-slate-900 truncate">{campaign.campaign_name}</h1>
+            <h1 className="text-lg font-bold text-gray-900 truncate">{campaign.campaign_name}</h1>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-              <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium', STATUS_STYLE[status] ?? 'bg-slate-100 text-slate-500')}>
+              <span className={cn('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', STATUS_STYLE[status] ?? 'bg-gray-100 text-gray-500')}>
                 {statusLabel[status] ?? status}
               </span>
               {campaign.questionnaire_type && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-700">
                   {campaignAgentSourceLabel(t, campaign.questionnaire_type)}
                 </span>
               )}
               {campaign.quota_mode && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-600">
                   {campaignQuotaModeLabel(t, campaign.quota_mode)}
                 </span>
               )}
@@ -530,8 +530,8 @@ export function CampaignDetailPage() {
               className={cn(
                 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border',
                 callsLoading
-                  ? 'bg-slate-50 text-slate-300 border-slate-200 cursor-not-allowed'
-                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-gray-50 text-gray-300 border-gray-200 cursor-not-allowed'
+                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
               )}
             >
               <RefreshCw size={13} className={cn(callsLoading && 'animate-spin')} />
@@ -545,8 +545,8 @@ export function CampaignDetailPage() {
               className={cn(
                 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
                 isTerminal
-                  ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                  : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
+                  ? 'bg-gray-100 text-gray-300 cursor-not-allowed'
+                  : 'bg-white text-red-600 hover:bg-red-50 border border-red-200'
               )}
             >
               {interrupting ? <Loader2 size={13} className="animate-spin" /> : <StopCircle size={13} />}
@@ -555,25 +555,25 @@ export function CampaignDetailPage() {
           </div>
         </div>
 
-        {/* 通话概览：基于 calls_v2 聚合 */}
-        <div className="flex-shrink-0 border-b border-slate-200 bg-slate-50/90 px-6 py-3">
+        {/* Call overview stats */}
+        <div className="flex-shrink-0 border-b border-gray-100 bg-gray-50 px-6 py-3">
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
             <button
               type="button"
               onClick={() => onStatFilterClick('all')}
               className={cn(
-                'flex w-full items-start gap-2 rounded-lg border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
+                'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'all'
-                  ? 'border-blue-500 ring-1 ring-blue-200/80 bg-blue-50/30'
-                  : 'border-slate-200 hover:bg-slate-50/80',
+                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  : 'border-gray-100 hover:bg-gray-50',
               )}
             >
               <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-600">
                 <PhoneOutgoing size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_total_dialed')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_total_dialed')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900">
                   {callStats != null ? callStats.total_dialed : '—'}
                 </p>
               </div>
@@ -582,18 +582,18 @@ export function CampaignDetailPage() {
               type="button"
               onClick={() => onStatFilterClick('answered')}
               className={cn(
-                'flex w-full items-start gap-2 rounded-lg border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
+                'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'answered'
-                  ? 'border-blue-500 ring-1 ring-blue-200/80 bg-blue-50/30'
-                  : 'border-slate-200 hover:bg-slate-50/80',
+                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  : 'border-gray-100 hover:bg-gray-50',
               )}
             >
               <div className="mt-0.5 rounded-md bg-emerald-50 p-1.5 text-emerald-600">
                 <PhoneCall size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_answered')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_answered')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900">
                   {callStats != null ? callStats.answered : '—'}
                 </p>
               </div>
@@ -602,18 +602,18 @@ export function CampaignDetailPage() {
               type="button"
               onClick={() => onStatFilterClick('voicemail')}
               className={cn(
-                'flex w-full items-start gap-2 rounded-lg border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
+                'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'voicemail'
-                  ? 'border-blue-500 ring-1 ring-blue-200/80 bg-blue-50/30'
-                  : 'border-slate-200 hover:bg-slate-50/80',
+                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  : 'border-gray-100 hover:bg-gray-50',
               )}
             >
-              <div className="mt-0.5 rounded-md bg-violet-50 p-1.5 text-violet-600">
+              <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-500">
                 <Voicemail size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_voicemail')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_voicemail')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900">
                   {callStats != null ? callStats.voicemail : '—'}
                 </p>
               </div>
@@ -622,18 +622,18 @@ export function CampaignDetailPage() {
               type="button"
               onClick={() => onStatFilterClick('no_answer')}
               className={cn(
-                'flex w-full items-start gap-2 rounded-lg border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
+                'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'no_answer'
-                  ? 'border-blue-500 ring-1 ring-blue-200/80 bg-blue-50/30'
-                  : 'border-slate-200 hover:bg-slate-50/80',
+                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  : 'border-gray-100 hover:bg-gray-50',
               )}
             >
               <div className="mt-0.5 rounded-md bg-amber-50 p-1.5 text-amber-600">
                 <PhoneMissed size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_no_answer')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_no_answer')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900">
                   {callStats != null ? callStats.no_answer : '—'}
                 </p>
               </div>
@@ -642,29 +642,29 @@ export function CampaignDetailPage() {
               type="button"
               onClick={() => onStatFilterClick('failed')}
               className={cn(
-                'flex w-full items-start gap-2 rounded-lg border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
+                'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'failed'
-                  ? 'border-blue-500 ring-1 ring-blue-200/80 bg-blue-50/30'
-                  : 'border-slate-200 hover:bg-slate-50/80',
+                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  : 'border-gray-100 hover:bg-gray-50',
               )}
             >
-              <div className="mt-0.5 rounded-md bg-rose-50 p-1.5 text-rose-600">
+              <div className="mt-0.5 rounded-md bg-red-50 p-1.5 text-red-500">
                 <CircleAlert size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_failed')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_failed')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900">
                   {callStats != null ? callStats.failed : '—'}
                 </p>
               </div>
             </button>
-            <div className="flex items-start gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 shadow-sm">
-              <div className="mt-0.5 rounded-md bg-sky-50 p-1.5 text-sky-600">
+            <div className="flex items-start gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2.5 shadow-sm">
+              <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-500">
                 <Timer size={14} />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium text-slate-500">{t('agora.stat_total_duration')}</p>
-                <p className="text-lg font-semibold tabular-nums text-slate-900 tracking-tight">
+                <p className="text-[11px] font-medium text-gray-400">{t('agora.stat_total_duration')}</p>
+                <p className="text-lg font-semibold tabular-nums text-gray-900 tracking-tight">
                   {callStats != null ? fmtDurationHms(callStats.total_duration_seconds) : '—'}
                 </p>
               </div>
@@ -674,18 +674,18 @@ export function CampaignDetailPage() {
 
         {/* Body split */}
         <div className="flex-1 overflow-hidden flex">
-          {/* Left: existing campaign detail */}
-          <div className="w-[30%] min-w-[360px] overflow-y-auto p-6 bg-slate-50">
+          {/* Left: campaign detail */}
+          <div className="w-[30%] min-w-[360px] overflow-y-auto p-6 bg-gray-50">
             <div className="space-y-3">
               <Card title={t('agora.card_basic')}>
-                <div className="py-2.5 border-b border-slate-100">
-                  <div className="flex items-center justify-between text-[11px] text-slate-500">
+                <div className="py-2.5 border-b border-gray-100">
+                  <div className="flex items-center justify-between text-[11px] text-gray-400">
                     <span>{t('agora.dial_progress')}</span>
                     <span className="font-mono">{dialedNumbers}/{totalNumbers}</span>
                   </div>
-                  <div className="mt-1.5 h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="mt-1.5 h-2 rounded-full bg-gray-100 overflow-hidden">
                     <div
-                      className="h-full bg-blue-600 rounded-full transition-[width] duration-300"
+                      className="h-full bg-indigo-500 rounded-full transition-[width] duration-300"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -711,16 +711,16 @@ export function CampaignDetailPage() {
                   return (
                     <div
                       key={key}
-                      className="flex items-start gap-3 py-2.5 border-b border-slate-100 last:border-0"
+                      className="flex items-start gap-3 py-2.5 border-b border-gray-100 last:border-0"
                     >
-                      <span className="w-36 flex-shrink-0 text-xs text-slate-500 pt-0.5">{label}</span>
+                      <span className="w-36 flex-shrink-0 text-xs text-gray-400 pt-0.5">{label}</span>
                       <span
                         className={cn(
                           'inline-flex items-center rounded-md px-2.5 py-1 text-xs font-semibold tracking-tight',
                           'ring-1 shadow-sm',
                           enabled
-                            ? 'bg-emerald-50 text-emerald-800 ring-emerald-200/90'
-                            : 'bg-slate-100/90 text-slate-600 ring-slate-200/90',
+                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-200/90'
+                            : 'bg-gray-100 text-gray-500 ring-gray-200/90',
                         )}
                       >
                         {enabled ? t('agora.feature_enabled') : t('agora.feature_disabled')}
@@ -741,7 +741,7 @@ export function CampaignDetailPage() {
 
               {campaign.structured_output && (
                 <Card title="Structured Output">
-                  <pre className="text-xs text-slate-600 bg-slate-50 rounded-lg p-3 overflow-x-auto leading-relaxed">
+                  <pre className="text-xs text-gray-600 bg-gray-50 rounded-lg p-3 overflow-x-auto leading-relaxed border border-gray-100">
                     {JSON.stringify(campaign.structured_output, null, 2)}
                   </pre>
                 </Card>
@@ -751,14 +751,14 @@ export function CampaignDetailPage() {
 
           {/* Right: call records list */}
           <div className="flex-1 overflow-y-auto bg-white">
-            <div className="px-4 py-3 border-b border-slate-200 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="px-4 py-3 border-b border-gray-100 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <Phone size={16} className="text-blue-600 flex-shrink-0" />
-                <h2 className="text-sm font-semibold text-slate-900">{t('agora.call_log')}</h2>
-                <span className="text-xs text-slate-400">{t('agora.calls_n', { n: callsTotal })}</span>
+                <Phone size={16} className="text-indigo-600 flex-shrink-0" />
+                <h2 className="text-sm font-semibold text-gray-900">{t('agora.call_log')}</h2>
+                <span className="text-xs text-gray-400">{t('agora.calls_n', { n: callsTotal })}</span>
               </div>
               <div className="flex items-center gap-2 flex-wrap justify-end">
-                <label className="flex items-center gap-1.5 text-xs text-slate-500">
+                <label className="flex items-center gap-1.5 text-xs text-gray-500">
                   <span className="whitespace-nowrap">{t('agora.sort_label')}</span>
                   <select
                     value={callListSort}
@@ -766,7 +766,7 @@ export function CampaignDetailPage() {
                       setCallListSort(e.target.value as CallListSort)
                       setPage(1)
                     }}
-                    className="text-xs border border-slate-200 rounded-md px-2 py-1.5 bg-white text-slate-800 min-w-0 max-w-[min(100%,220px)]"
+                    className="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-900 min-w-0 max-w-[min(100%,220px)]"
                   >
                     <option value="time_desc">{t('agora.sort_time_desc')}</option>
                     <option value="duration_asc">{t('agora.sort_duration_asc')}</option>
@@ -774,14 +774,14 @@ export function CampaignDetailPage() {
                   </select>
                 </label>
                 {callsTotal > 0 && (
-                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
                     <button
                       type="button"
                       onClick={() => setPage(p => Math.max(1, p - 1))}
                       disabled={page <= 1}
                       className={cn(
                         'px-2 py-1 rounded border',
-                        page <= 1 ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'border-slate-200 hover:bg-slate-50',
+                        page <= 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'border-gray-200 hover:bg-gray-50',
                       )}
                     >
                       {t('agora.prev_page')}
@@ -793,7 +793,7 @@ export function CampaignDetailPage() {
                       disabled={page >= totalPages}
                       className={cn(
                         'px-2 py-1 rounded border',
-                        page >= totalPages ? 'text-slate-300 border-slate-200 cursor-not-allowed' : 'border-slate-200 hover:bg-slate-50',
+                        page >= totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'border-gray-200 hover:bg-gray-50',
                       )}
                     >
                       {t('agora.next_page')}
@@ -810,14 +810,14 @@ export function CampaignDetailPage() {
             )}
 
             {callsLoading && callsTotal === 0 && (
-              <div className="flex items-center justify-center py-16 text-slate-400">
+              <div className="flex items-center justify-center py-16 text-gray-400">
                 <Loader2 size={18} className="animate-spin mr-2" />
                 <span className="text-sm">{t('agora.fetching_calls')}</span>
               </div>
             )}
 
             {!callsLoading && callsTotal === 0 && (
-              <div className="px-4 py-16 text-center text-slate-400">
+              <div className="px-4 py-16 text-center text-gray-400">
                 <p className="text-sm">
                   {(callStats?.total_dialed ?? 0) > 0 && callCategoryFilter !== 'all'
                     ? t('agora.no_calls_in_filter')
@@ -831,8 +831,8 @@ export function CampaignDetailPage() {
 
             {callsTotal > 0 && (
               <div className="overflow-x-auto">
-                <div className="min-w-[980px] divide-y divide-slate-100">
-                  <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 text-[11px] text-slate-500 font-medium grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2">
+                <div className="min-w-[980px] divide-y divide-gray-100">
+                  <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400 font-medium grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2">
                   <span>{t('agora.th_status')}</span>
                   <span>{t('agora.th_to')}</span>
                   <span>{t('agora.th_type')}</span>
@@ -844,7 +844,7 @@ export function CampaignDetailPage() {
                 {pageItems.map(c => {
                   const st = categoryStyle(c.call_category)
                   return (
-                    <div key={c.call_id} className="px-4 py-2 hover:bg-slate-50 transition-colors grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2 items-center">
+                    <div key={c.call_id} className="px-4 py-2 hover:bg-gray-50 transition-colors grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2 items-center">
                       <div className="flex items-center justify-start">
                         <span className={cn('w-2.5 h-2.5 rounded-full', st.dot)} title={c.call_category ?? 'unknown'} />
                       </div>
@@ -854,13 +854,13 @@ export function CampaignDetailPage() {
                       <span className={cn('text-[11px] font-mono truncate', st.text)} title={c.call_category ?? ''}>
                         {c.call_category ?? '—'}
                       </span>
-                      <span className="text-[11px] text-slate-600 font-mono truncate" title={c.hangup_reason ?? ''}>
+                      <span className="text-[11px] text-gray-600 font-mono truncate" title={c.hangup_reason ?? ''}>
                         {c.hangup_reason ?? '—'}
                       </span>
-                      <span className="text-[11px] text-slate-600 font-mono">
+                      <span className="text-[11px] text-gray-600 font-mono">
                         {c.duration_seconds ?? 0}s
                       </span>
-                      <span className="text-[11px] text-slate-600 font-mono truncate" title={c.agent_session_id ?? ''}>
+                      <span className="text-[11px] text-gray-600 font-mono truncate" title={c.agent_session_id ?? ''}>
                           {c.agent_session_id ?? '—'}
                       </span>
                       <div className="flex items-center justify-end gap-1">
@@ -878,8 +878,8 @@ export function CampaignDetailPage() {
                           className={cn(
                             'w-6 h-6 inline-flex items-center justify-center rounded-md border',
                             c.has_transcript
-                              ? 'border-slate-200 text-slate-500 hover:bg-slate-100'
-                              : 'border-slate-100 text-slate-200 cursor-not-allowed',
+                              ? 'border-gray-200 text-gray-500 hover:bg-gray-100'
+                              : 'border-gray-100 text-gray-200 cursor-not-allowed',
                           )}
                           title={
                             c.has_transcript
@@ -903,8 +903,8 @@ export function CampaignDetailPage() {
                           className={cn(
                             'w-6 h-6 inline-flex items-center justify-center rounded-md border',
                             c.has_structured_output
-                              ? 'border-slate-200 text-slate-500 hover:bg-slate-100'
-                              : 'border-slate-100 text-slate-200 cursor-not-allowed',
+                              ? 'border-gray-200 text-gray-500 hover:bg-gray-100'
+                              : 'border-gray-100 text-gray-200 cursor-not-allowed',
                           )}
                           title={
                             c.has_structured_output
@@ -919,8 +919,8 @@ export function CampaignDetailPage() {
                           className={cn(
                             'w-6 h-6 inline-flex items-center justify-center rounded-md border',
                             c.record_file_url
-                              ? 'border-slate-200 text-slate-500 hover:bg-slate-100'
-                              : 'border-slate-100 text-slate-200 cursor-not-allowed pointer-events-none'
+                              ? 'border-gray-200 text-gray-500 hover:bg-gray-100'
+                              : 'border-gray-100 text-gray-200 cursor-not-allowed pointer-events-none'
                           )}
                           title={t('agora.tt_recording')}
                           target="_blank"
@@ -943,27 +943,27 @@ export function CampaignDetailPage() {
       {activeTranscript && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-6" onClick={closeModals}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <MessageSquare size={16} className="text-blue-600" />
-                <span className="text-sm font-semibold text-slate-900">{t('agora.modal_transcript')}</span>
-                <span className="text-xs text-slate-400 font-mono">{activeTranscript.call_id}</span>
+                <MessageSquare size={16} className="text-indigo-600" />
+                <span className="text-sm font-semibold text-gray-900">{t('agora.modal_transcript')}</span>
+                <span className="text-xs text-gray-400 font-mono">{activeTranscript.call_id}</span>
               </div>
-              <button onClick={closeModals} className="text-slate-400 hover:text-slate-600">
+              <button onClick={closeModals} className="text-gray-400 hover:text-gray-600">
                 <X size={16} />
               </button>
             </div>
-            <div className="p-5 overflow-y-auto space-y-2 bg-slate-50">
+            <div className="p-5 overflow-y-auto space-y-2 bg-gray-50 rounded-lg border border-gray-100">
               {(activeTranscript.transcript ?? []).length === 0 && (
-                <p className="text-sm text-slate-400">{t('agora.no_transcript')}</p>
+                <p className="text-sm text-gray-400">{t('agora.no_transcript')}</p>
               )}
               {(activeTranscript.transcript ?? []).filter(m => (m.content ?? '').trim()).map((m, idx) => (
                 <div key={idx} className={cn('flex', m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
                   <div className={cn(
                     'max-w-[78%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap',
                     m.role === 'assistant'
-                      ? 'bg-white text-slate-800 border border-slate-200 rounded-tl-sm'
-                      : 'bg-blue-600 text-white rounded-tr-sm'
+                      ? 'bg-white text-gray-900 border border-gray-100 rounded-tl-sm'
+                      : 'bg-indigo-600 text-white rounded-tr-sm'
                   )}>
                     {m.content}
                   </div>
@@ -978,21 +978,21 @@ export function CampaignDetailPage() {
       {activeStructured && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-6" onClick={closeModals}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <Database size={16} className="text-emerald-600" />
-                <span className="text-sm font-semibold text-slate-900">Structured Output</span>
-                <span className="text-xs text-slate-400 font-mono">{activeStructured.call_id}</span>
+                <span className="text-sm font-semibold text-gray-900">Structured Output</span>
+                <span className="text-xs text-gray-400 font-mono">{activeStructured.call_id}</span>
               </div>
-              <button onClick={closeModals} className="text-slate-400 hover:text-slate-600">
+              <button onClick={closeModals} className="text-gray-400 hover:text-gray-600">
                 <X size={16} />
               </button>
             </div>
             <div className="p-5 overflow-y-auto bg-white">
               {activeStructured.structured_output == null ? (
-                <p className="text-sm text-slate-400">{t('agora.no_structured_output')}</p>
+                <p className="text-sm text-gray-400">{t('agora.no_structured_output')}</p>
               ) : (
-                <pre className="text-xs text-slate-700 bg-slate-50 rounded-xl p-4 overflow-x-auto">
+                <pre className="text-xs text-gray-700 bg-gray-50 rounded-xl p-4 overflow-x-auto border border-gray-100">
                   {JSON.stringify(activeStructured.structured_output, null, 2)}
                 </pre>
               )}

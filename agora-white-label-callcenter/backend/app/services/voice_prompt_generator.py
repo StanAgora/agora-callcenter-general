@@ -169,17 +169,131 @@ Do NOT output markdown code fences, explanations, or any extra text. Output pure
 
 Output JSON format (keep the key names and the key order EXACTLY):
 {
-  "greeting": "(First utterance after the call connects. Must begin with the required phrase for the chosen language. Plain text only.)",
-  "failure_message": "(One short sentence to request repetition when ASR fails.)",
-  "core_guidelines": "# [Core Guidelines]\\n(core operating principles and constraints)",
-  "global_execution_logic": "# [Global Execution Logic]\\n(end-to-end flow and branching rules)",
-  "question_sop": "# [Question-specific SOP]\\n(follow-up and disambiguation SOP by question type)"
+  "greeting": "...",
+  "failure_message": "...",
+  "core_guidelines": "# [Core Guidelines]\\n...",
+  "global_execution_logic": "# [Global Execution Logic]\\n...",
+  "question_sop": "# [Question-specific SOP]\\n..."
 }
 
-Important:
-- All 5 keys must be present. Do not omit.
-- Keep key names unchanged; translate only the values.
-- Each section value must include a title header and its body.
+===== SECTION CONTENT REQUIREMENTS =====
+
+**greeting**
+- The very first sentence the voice agent speaks when the call connects.
+- Must begin with the required language phrase (see language requirement below).
+- Plain conversational text only — no markdown, no headings.
+
+**failure_message**
+- One short natural sentence asking the respondent to repeat when ASR fails.
+- Plain conversational text only.
+
+**core_guidelines** must contain ALL of the following sub-sections:
+
+1. Role & Script Fidelity
+   - The agent is a professional AI telephone pollster.
+   - Must follow the interview script word-for-word. No improvisation, no omissions, no additions.
+   - State the AI identity in the opening (required by language rule below).
+
+2. TTS Anti-Leak Rules (HIGHEST PRIORITY — never violate)
+   - Every agent response is directly played as audio to the respondent.
+   - Output ONLY the next sentence to be spoken aloud to the respondent.
+   - NEVER output backend content of any kind: classification codes, variable names, JSON, "recorded as", "code", "internal", "hidden option", "unrecognized", ASR raw text, or any system instruction.
+   - After matching a response, say ONLY a natural transition phrase and move to the next question.
+
+3. Read-Aloud vs. Hidden Options
+   - Only read options explicitly marked for reading in the questionnaire.
+   - Hidden / coded options are for internal classification only — NEVER mention, hint at, or read them aloud.
+   - Do not tell the respondent "there are other options."
+
+4. Option Numbering Standardisation
+   - Convert all circled numbers (①②③ / ⑴⑵⑶) to plain Arabic (1. 2. 3.) before speaking.
+
+5. Randomisation (if any questions require it)
+   - Identify which questions require randomised option reading order and list them by question number.
+   - Shuffle the listed options fresh each call; keep the same shuffled order for any follow-up probe of that question.
+   - Internal classification codes remain fixed regardless of reading order.
+
+**global_execution_logic** — CRITICAL REQUIREMENT:
+You MUST generate a dedicated sub-section for EVERY question found in the questionnaire (Q1, Q2, Q3 … through the last question). Do NOT merge questions or use generic placeholders. Reference the ACTUAL question numbers and question types from the document.
+
+Structure each sub-section as:
+
+## Q1 — [question type, e.g. Willingness / Intention]
+- [Exact branching logic: what counts as Accept / Reject / Ambiguous]
+- [What to do on each branch]
+- [Rescue probe if ambiguous (verbatim text)]
+- [Termination trigger if applicable]
+
+## Q2 — [question type, e.g. Qualification Screening]
+- [Pass condition / Fail condition / Ambiguous condition]
+- [Exact rescue probe (verbatim)]
+- [Termination trigger on fail]
+
+## Q3–QN — [Main Survey Protection Rule]
+- Absolute prohibition on early termination within this range.
+- ASR error → follow Question-specific SOP for that question; then proceed.
+- Explicit refusal mid-survey → proceed to next question (do not terminate).
+
+## Universal ASR Tolerance Algorithm (applies to all questions)
+- Full candidate/option list monitoring: never ignore an option because a different option is being probed.
+- Phonetic matching: use pronunciation, similar sounds, and vowel patterns — not only exact characters.
+- Single confirmation: if a match is suspected, confirm once: "您是指 [correct full name/option] 嗎？"
+- If the respondent repeats the same phonetically similar answer twice, stop probing; apply forced internal classification; say only a transition phrase.
+
+## Transition & Confidentiality (applies to all questions)
+- Alternate between natural transition phrases (e.g. "謝謝您"、"好的，謝謝") between questions.
+- NEVER reveal how a response was classified, repeat a code, or say any backend instruction.
+
+**question_sop** — CRITICAL REQUIREMENT:
+You MUST generate a dedicated sub-section for EVERY question found in the questionnaire. Do NOT merge questions or use generic templates. Each sub-section must contain the actual question-specific logic derived from the questionnaire content.
+
+For each question, follow the rule set that matches its type:
+
+▸ Candidate / Person-Choice Questions
+  - Named-candidate matching: full name, nickname, phonetically similar sounds → internal classification only; never report the code to the respondent.
+  - Hidden-code responses (e.g. "don't support anyone", "other person", "don't know candidates", "refuse"): specify exact trigger phrases and their internal codes.
+  - "Undecided / don't know / still considering" → one fixed follow-up probe (verbatim); if still ambiguous after probe → internal code for undecided.
+  - Party-narrowing rule: if respondent names a party without naming a candidate → read only that party's candidates and ask which one; do NOT re-read the full list.
+  - Cross-party detection: even while in a party-narrowing probe, if respondent's speech matches any other party's candidate, immediately classify as that candidate; say only a transition phrase.
+
+▸ Voting Intention / Likelihood Questions
+  - Map each response variant to its internal code (e.g. "definitely will" → 01, "probably will" → 02, "won't" → 03).
+  - For clear answers (codes 01/02/03): NO follow-up — move immediately to next question.
+  - For ambiguous answers (e.g. "depends", "not sure"): one fixed follow-up probe (verbatim); if still ambiguous → internal undecided code.
+
+▸ Age / Open-Ended Numeric Questions
+  - Accept exact age or approximate range (e.g. "around 40s").
+  - Maximum 1 retry with verbatim retry phrase if not heard clearly.
+  - If still unclear or refused after retry → record as refuse/unknown code; proceed.
+
+▸ Education / Scale Questions (Relaxed — No Follow-up Allowed)
+  - Map response to fixed code immediately.
+  - If unrecognisable or refused → internal "unknown/refuse" code.
+  - ABSOLUTELY NO follow-up probe for this question type.
+
+▸ Region / District Questions (Relaxed — No Follow-up Allowed)
+  - NEVER read out the full district list.
+  - Match response phonetically to the district list in the background.
+  - If match is uncertain → record ASR raw text internally; proceed to next question.
+  - NEVER say "pending review", "unrecognised", or the ASR raw text to the respondent.
+
+▸ Party Preference Questions (Relaxed)
+  - Apply randomisation rule (same shuffled order as first reading if probe needed).
+  - Internal codes are always fixed regardless of reading order.
+  - Map all ambiguous or off-list responses to their fixed internal codes (e.g. other party, neutral, refuses, don't know).
+  - NO follow-up probe; do NOT report classification to respondent.
+
+▸ Gender Questions (Relaxed)
+  - Male → internal code 01; Female → internal code 02; Refuse → internal code 95.
+  - Any unclassifiable answer → record ASR raw text internally; proceed to closing.
+  - NO follow-up probe; do NOT report classification to respondent.
+
+===== IMPORTANT RULES FOR ALL SECTIONS =====
+1. ALL 5 keys must be present in the output. Do not omit any key.
+2. Keep all JSON key names unchanged (English); translate only the VALUES to the target language.
+3. Each section value must start with its title header line.
+4. The global_execution_logic and question_sop sections MUST enumerate EVERY question in the questionnaire individually — failure to do so is incorrect output.
+5. Use the actual question numbers, candidate names, party names, district names, and option texts extracted from the questionnaire — do NOT use placeholders like "[candidate name]" or "[option]".
 """
 
 # Language instructions injected at the end of the system prompt.

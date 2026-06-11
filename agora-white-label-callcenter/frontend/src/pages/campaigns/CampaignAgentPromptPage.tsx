@@ -92,8 +92,8 @@ export function CampaignAgentPromptPage() {
 
   if (loading) {
     return (
-      <div className="flex h-full min-h-[40vh] items-center justify-center text-slate-400">
-        <Loader2 size={22} className="mr-2 animate-spin" />
+      <div className="flex h-full min-h-[40vh] items-center justify-center text-gray-400">
+        <Loader2 size={22} className="mr-2 animate-spin text-indigo-600" />
         <span className="text-sm">{t('campaign_agent_prompt.loading')}</span>
       </div>
     )
@@ -104,12 +104,12 @@ export function CampaignAgentPromptPage() {
       <div className="p-8">
         <Link
           to={campaignId ? `/campaigns/${campaignId}` : '/'}
-          className="mb-4 inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700"
         >
           <ArrowLeft size={15} />
           {t('agora.back')}
         </Link>
-        <div className="max-w-lg rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="max-w-lg rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-600">
           {error || t('campaign_agent_prompt.err_cannot_edit')}
         </div>
       </div>
@@ -122,20 +122,20 @@ export function CampaignAgentPromptPage() {
         <div>
           <Link
             to={`/campaigns/${campaignId}`}
-            className="mb-2 inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700"
+            className="mb-2 inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700"
           >
             <ArrowLeft size={15} />
             {t('campaign_agent_prompt.back_campaign')}
           </Link>
-          <h1 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-            <Bot className="h-5 w-5 text-blue-600" />
+          <h1 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+            <Bot className="h-5 w-5 text-indigo-600" />
             {t('campaign_agent_prompt.title')}
           </h1>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <p className="mt-0.5 text-sm text-gray-400">
             {campaignName}
-            <span className="mx-1.5 text-slate-300">·</span>
-            <span className="font-mono text-xs text-slate-600">{agent.agent_name}</span>
-            <span className="ml-1.5 text-xs text-slate-400">{agent.agent_id}</span>
+            <span className="mx-1.5 text-gray-300">·</span>
+            <span className="font-mono text-xs text-gray-600">{agent.agent_name}</span>
+            <span className="ml-1.5 text-xs text-gray-400">{agent.agent_id}</span>
           </p>
         </div>
         <button
@@ -143,8 +143,8 @@ export function CampaignAgentPromptPage() {
           onClick={handleUpdate}
           disabled={updating}
           className={cn(
-            'inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-colors',
-            updating ? 'cursor-not-allowed bg-blue-400' : 'bg-blue-600 hover:bg-blue-700',
+            'inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors',
+            updating ? 'cursor-not-allowed bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700',
           )}
         >
           {updating && <Loader2 size={16} className="animate-spin" />}
@@ -152,7 +152,7 @@ export function CampaignAgentPromptPage() {
         </button>
       </div>
 
-      <div className="mb-3 flex-shrink-0 rounded-lg border border-amber-200/80 bg-amber-50/80 px-3 py-2 text-xs text-amber-900">
+      <div className="mb-3 flex-shrink-0 rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-xs text-amber-800">
         <span className="mr-1 inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
           {t('common.sensitive')}
         </span>
@@ -160,12 +160,12 @@ export function CampaignAgentPromptPage() {
       </div>
 
       {saveError && (
-        <p className="mb-3 flex-shrink-0 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="mb-3 flex-shrink-0 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-600">
           {saveError}
         </p>
       )}
 
-      <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <PropsEditor form={form} onChange={patch => setForm(prev => (prev ? { ...prev, ...patch } : null))} />
       </div>
     </div>

@@ -40,19 +40,19 @@ function Field({
   const isPassword = type === 'password'
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 mb-1">{label}</label>
-      {desc && <p className="text-xs text-slate-400 mb-1.5">{desc}</p>}
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      {desc && <p className="text-xs text-gray-400 mb-1.5">{desc}</p>}
       <div className="relative">
         <input
           type={isPassword && !show ? 'password' : 'text'}
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white font-mono"
         />
         {isPassword && (
           <button type="button" onClick={() => setShow(s => !s)}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
             {show ? <EyeOff size={14} /> : <Eye size={14} />}
           </button>
         )}
@@ -63,8 +63,8 @@ function Field({
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
-      <h2 className="text-sm font-semibold text-slate-900 border-b border-slate-100 pb-3">{title}</h2>
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 space-y-5">
+      <h2 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3">{title}</h2>
       {children}
     </div>
   )
@@ -110,7 +110,7 @@ export function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32 text-slate-400">
+      <div className="flex items-center justify-center py-32 text-gray-400">
         <Loader2 size={20} className="animate-spin mr-2" />
         <span className="text-sm">加载配置中...</span>
       </div>
@@ -119,10 +119,10 @@ export function SettingsPage() {
 
   return (
     <div className="p-8 max-w-2xl">
-      <h1 className="text-xl font-bold text-slate-900 mb-6">Settings</h1>
+      <h1 className="text-xl font-bold text-gray-900 mb-6">Settings</h1>
 
       {error && (
-        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{error}</div>
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-600">{error}</div>
       )}
 
       <div className="space-y-5">
@@ -226,7 +226,7 @@ export function SettingsPage() {
         {/* Save */}
         <div className="flex items-center justify-between pt-1">
           {saved && (
-            <div className="flex items-center gap-1.5 text-green-600 text-sm">
+            <div className="flex items-center gap-1.5 text-emerald-600 text-sm">
               <CheckCircle2 size={15} />
               已保存到 .env 文件
             </div>
@@ -235,7 +235,7 @@ export function SettingsPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               {saving && <Loader2 size={14} className="animate-spin" />}
               {saving ? '保存中...' : '保存设置'}

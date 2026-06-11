@@ -9,7 +9,7 @@ const PHONE_RE = /^\+\d{7,15}$/
 function validateCsvText(text: string): { valid: boolean; count: number; errors: string[] } {
   const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n')
   if (!lines.length) return { valid: false, count: 0, errors: ['Empty file'] }
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^\uFEFF/, ''))
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^﻿/, ''))
   if (!headers.includes('phone_number')) return { valid: false, count: 0, errors: ['Missing column: phone_number'] }
   const idx = headers.indexOf('phone_number')
   const errors: string[] = []
@@ -223,29 +223,29 @@ export function QuotaEditorPage() {
   const totalCompleted = cells.reduce((s, c) => s + c.completed, 0)
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-8 max-w-5xl bg-gray-50 min-h-full">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors">
+          <Link to="/" className="text-gray-400 hover:text-gray-600 transition-colors">
             <ChevronLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">{t('quota_editor.title')}</h1>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h1 className="text-xl font-bold text-gray-900">{t('quota_editor.title')}</h1>
+            <p className="text-xs text-gray-400 mt-0.5">
               {t('quota_editor.cell_count', { count: cells.length })} · {t('quota_editor.target_total', { n: totalTarget })} · {t('quota_editor.completed_total', { n: totalCompleted })}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          {saveState === 'pending' && <span className="text-slate-400">{t('common.changed')}</span>}
-          {saveState === 'saving' && <span className="flex items-center gap-1 text-slate-400"><Loader2 size={11} className="animate-spin" /> {t('common.saving')}</span>}
+          {saveState === 'pending' && <span className="text-gray-400">{t('common.changed')}</span>}
+          {saveState === 'saving' && <span className="flex items-center gap-1 text-gray-400"><Loader2 size={11} className="animate-spin" /> {t('common.saving')}</span>}
           {saveState === 'saved' && <span className="flex items-center gap-1 text-emerald-600"><CheckCircle2 size={12} /> {t('common.saved')}</span>}
-          {saveState === 'error' && <span className="flex items-center gap-1 text-red-500"><AlertCircle size={12} /> {t('common.save_failed')}</span>}
+          {saveState === 'error' && <span className="flex items-center gap-1 text-red-600"><AlertCircle size={12} /> {t('common.save_failed')}</span>}
           {saveState === 'idle' && cells.length > 0 && (
             <button
               onClick={() => saveCells(cells)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
               <Save size={11} /> {t('common.save')}
             </button>
@@ -254,21 +254,21 @@ export function QuotaEditorPage() {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-700">
+        <div className="mb-4 flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-600">
           <AlertCircle size={14} /> {errorMsg}
         </div>
       )}
 
       {/* Phone List */}
-      <div className="mb-4 bg-white border border-slate-200 rounded-xl p-4">
+      <div className="mb-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Phone size={14} className="text-slate-400" />
-            <span className="text-sm font-medium text-slate-700">{t('quota_editor.phone_list_title')}</span>
+            <Phone size={14} className="text-gray-400" />
+            <span className="text-sm font-medium text-gray-700">{t('quota_editor.phone_list_title')}</span>
             {phoneCount !== null && (
               <span className={cn(
                 'text-xs px-2 py-0.5 rounded-full font-medium',
-                phoneCount > 0 ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                phoneCount > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
               )}>
                 {phoneCount > 0
                   ? t('quota_editor.phone_list_count', { n: phoneCount })
@@ -276,7 +276,7 @@ export function QuotaEditorPage() {
               </span>
             )}
             {phoneUploadMsg && (
-              <span className={cn('text-xs', phoneUploadMsg.startsWith('✗') ? 'text-red-500' : 'text-green-600')}>
+              <span className={cn('text-xs', phoneUploadMsg.startsWith('✗') ? 'text-red-600' : 'text-emerald-600')}>
                 {phoneUploadMsg}
               </span>
             )}
@@ -284,7 +284,7 @@ export function QuotaEditorPage() {
           <button
             onClick={() => phoneInputRef.current?.click()}
             disabled={phoneUploading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors flex-shrink-0"
           >
             {phoneUploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
             {t('quota_editor.phone_list_reupload')}
@@ -300,16 +300,16 @@ export function QuotaEditorPage() {
       </div>
 
       {/* AI 추천 패널 */}
-      <div className="mb-5 bg-white border border-slate-200 rounded-xl p-4">
+      <div className="mb-5 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-slate-800">{t('quota_editor.ai_suggest_title')}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{t('quota_editor.ai_suggest_desc')}</p>
+            <p className="text-sm font-semibold text-gray-900">{t('quota_editor.ai_suggest_title')}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('quota_editor.ai_suggest_desc')}</p>
           </div>
           <button
             onClick={handleAiSuggest}
             disabled={aiLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-600 text-white rounded-lg text-xs font-medium hover:bg-purple-700 disabled:opacity-60 transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors flex-shrink-0"
           >
             {aiLoading ? <Loader2 size={13} className="animate-spin" /> : <Brain size={13} />}
             {aiLoading ? t('quota_editor.btn_ai_analyzing') : cells.length > 0 ? t('quota_editor.btn_ai_re_suggest') : t('quota_editor.btn_ai_suggest')}
@@ -317,16 +317,16 @@ export function QuotaEditorPage() {
         </div>
 
         {aiResult && (
-          <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
-            <p className="text-xs text-purple-700">
+          <div className="mt-3 pt-3 border-t border-gray-100 space-y-1.5">
+            <p className="text-xs text-indigo-700">
               <span className="font-medium">{t('quota_editor.label_target_pop')}:</span> {aiResult.target_population}
             </p>
             {aiResult.screening_rules.length > 0 && (
-              <div className="text-xs text-slate-600">
-                <span className="font-medium text-slate-700">{t('quota_editor.label_screening')}</span>
+              <div className="text-xs text-gray-600">
+                <span className="font-medium text-gray-700">{t('quota_editor.label_screening')}</span>
                 <ul className="mt-0.5 space-y-0.5">
                   {aiResult.screening_rules.map((r, i) => (
-                    <li key={i} className="flex gap-1.5"><span className="text-slate-400">·</span>{r}</li>
+                    <li key={i} className="flex gap-1.5"><span className="text-gray-400">·</span>{r}</li>
                   ))}
                 </ul>
               </div>
@@ -341,15 +341,15 @@ export function QuotaEditorPage() {
       </div>
 
       {/* 고객 요구사항 */}
-      <div className="mb-5 bg-white border border-slate-200 rounded-xl p-4">
-        <p className="text-sm font-semibold text-slate-800 mb-1">{t('quota_editor.req_title')}</p>
-        <p className="text-xs text-slate-400 mb-3">{t('quota_editor.req_desc')}</p>
+      <div className="mb-5 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+        <p className="text-sm font-semibold text-gray-900 mb-1">{t('quota_editor.req_title')}</p>
+        <p className="text-xs text-gray-400 mb-3">{t('quota_editor.req_desc')}</p>
         <textarea
           value={requirements}
           onChange={e => setRequirements(e.target.value)}
           placeholder={t('quota_editor.req_placeholder')}
           rows={3}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white resize-none"
         />
         {reqError && (
           <p className="mt-1 text-xs text-red-600 flex items-center gap-1"><AlertCircle size={11} />{reqError}</p>
@@ -389,12 +389,12 @@ export function QuotaEditorPage() {
 
       {/* Quota matrix */}
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-slate-400">
+        <div className="flex items-center justify-center py-20 text-gray-400">
           <Loader2 size={20} className="animate-spin mr-2" />
           <span className="text-sm">{t('common.loading_data')}</span>
         </div>
       ) : cells.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400 text-sm">
+        <div className="bg-white border border-gray-100 rounded-xl p-12 text-center text-gray-400 text-sm shadow-sm">
           <Brain size={32} className="mx-auto mb-3 opacity-30" />
           <p>{t('quota_editor.empty_title')}</p>
           <p className="text-xs mt-1">{t('quota_editor.empty_hint')}</p>
@@ -402,14 +402,14 @@ export function QuotaEditorPage() {
       ) : (
         <div className="space-y-5">
           {Array.from(grouped.entries()).map(([areaName, genderMap]) => (
-            <div key={areaName} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-              <div className="px-5 py-3 bg-slate-50 border-b border-slate-200">
-                <h3 className="text-sm font-semibold text-slate-800">{areaName}</h3>
+            <div key={areaName} className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+              <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
+                <h3 className="text-sm font-semibold text-gray-900">{areaName}</h3>
               </div>
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-gray-100">
                 {Array.from(genderMap.entries()).map(([genderName, ageCells]) => (
                   <div key={genderName} className="p-4">
-                    <p className="text-xs font-medium text-slate-500 mb-3">{genderName}</p>
+                    <p className="text-xs font-medium text-gray-500 mb-3">{genderName}</p>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                       {ageCells.map(cell => {
                         const sliderMax = Math.max(SLIDER_MAX, cell.target);
@@ -428,14 +428,14 @@ export function QuotaEditorPage() {
                         return (
                           <div key={cell.id} className={cn(
                             'rounded-lg border p-3 flex flex-col gap-2',
-                            cell.status === 'closed' ? 'border-green-200 bg-green-50' : 'border-slate-200'
+                            cell.status === 'closed' ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200 bg-white'
                           )}>
                             {/* Header: age label + completed/target */}
                             <div className="flex items-center justify-between gap-1">
-                              <p className="text-xs text-slate-600 font-medium truncate min-w-0">{cell.age_name}</p>
+                              <p className="text-xs text-gray-600 font-medium truncate min-w-0">{cell.age_name}</p>
                               <span className={cn(
                                 'text-[10px] font-semibold flex-shrink-0',
-                                cell.status === 'closed' ? 'text-green-600' : 'text-slate-400'
+                                cell.status === 'closed' ? 'text-emerald-600' : 'text-gray-400'
                               )}>
                                 {cell.completed}/{cell.target}
                               </span>
@@ -456,13 +456,13 @@ export function QuotaEditorPage() {
 
                             {/* Number input: target */}
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] text-slate-400 flex-shrink-0">목표</span>
+                              <span className="text-[10px] text-gray-400 flex-shrink-0">목표</span>
                               <input
                                 type="number"
                                 value={cell.target}
                                 onChange={e => handleTargetChange(cell.id, e.target.value)}
                                 disabled={cell.status === 'closed'}
-                                className="w-full text-xs border border-slate-200 rounded-md px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400 disabled:opacity-50 disabled:bg-transparent text-slate-700 min-w-0"
+                                className="w-full text-xs border border-gray-200 rounded-md px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:bg-transparent text-gray-700 min-w-0 bg-white"
                               />
                             </div>
                           </div>
@@ -479,18 +479,18 @@ export function QuotaEditorPage() {
 
       {cells.length > 0 && (
         <div className="mt-6 flex justify-between items-center">
-          <p className="text-xs text-slate-400">{t('quota_editor.autosave_hint')}</p>
+          <p className="text-xs text-gray-400">{t('quota_editor.autosave_hint')}</p>
           {surveyStatus === 'draft' ? (
             <span
               title={t('quota_editor.dashboard_locked_hint')}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-slate-200 text-slate-400 rounded-lg text-sm font-medium cursor-not-allowed select-none"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm font-medium cursor-not-allowed select-none"
             >
               {t('quota_editor.to_dashboard')}
             </span>
           ) : (
             <Link
               to={`/surveys/${id}/dashboard`}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
             >
               {t('quota_editor.to_dashboard')}
             </Link>

@@ -4,88 +4,69 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Google Blue
-        gblue: {
-          50:  '#E8F0FE',
-          100: '#D2E3FC',
-          200: '#AECBFA',
-          400: '#4285F4',
-          500: '#1a73e8',
-          600: '#1557B0',
-          700: '#0D3880',
+        // Primary accent — Indigo
+        primary: {
+          50:  '#EEF2FF',
+          100: '#E0E7FF',
+          200: '#C7D2FE',
+          400: '#818CF8',
+          500: '#6366F1',
+          600: '#4F46E5',
+          700: '#4338CA',
         },
-        // Google Red
-        gred: {
-          50:  '#FCE8E6',
-          100: '#F5C6C2',
-          400: '#EA4335',
-          500: '#D93025',
-          600: '#B31412',
-        },
-        // Google Green
-        ggreen: {
-          50:  '#E6F4EA',
-          100: '#CEEAD6',
-          400: '#34A853',
-          500: '#188038',
-          600: '#0D652D',
-        },
-        // Google Yellow / Amber
-        gyellow: {
-          50:  '#FEF7E0',
-          100: '#FDE293',
-          400: '#FBBC04',
-          500: '#F9AB00',
-          600: '#E37400',
-        },
-        // Google Purple
-        gpurple: {
-          50:  '#F3E8FD',
-          100: '#E4C7FA',
-          400: '#AB47BC',
-          500: '#8430CE',
-          600: '#6A1B9A',
-        },
-        // Google Teal
-        gteal: {
-          50:  '#E0F7FA',
-          400: '#00ACC1',
-          500: '#007B83',
-        },
-        // Surfaces
+        // Semantic surfaces
         surface: {
-          DEFAULT: '#F1F3F4',
+          DEFAULT: '#F9FAFB',
           card:    '#FFFFFF',
-          hover:   '#F8F9FA',
-          pressed: '#F1F3F4',
+          hover:   '#F9FAFB',
+          pressed: '#F3F4F6',
         },
-        // Text
+        // Semantic text
         ink: {
-          DEFAULT:   '#202124',
-          secondary: '#5F6368',
-          tertiary:  '#80868B',
-          disabled:  '#BDC1C6',
+          DEFAULT:   '#111827',
+          secondary: '#6B7280',
+          tertiary:  '#9CA3AF',
+          disabled:  '#D1D5DB',
         },
-        // Borders
+        // Semantic borders
         border: {
-          DEFAULT: '#DADCE0',
-          light:   '#E8EAED',
-          focus:   '#1a73e8',
+          DEFAULT: '#E5E7EB',
+          light:   '#F3F4F6',
+          focus:   '#4F46E5',
         },
+        // Status colours (low-saturation)
+        status: {
+          success:     '#059669',
+          'success-bg':'#ECFDF5',
+          warning:     '#D97706',
+          'warning-bg':'#FFFBEB',
+          error:       '#DC2626',
+          'error-bg':  '#FEF2F2',
+          info:        '#2563EB',
+          'info-bg':   '#EFF6FF',
+        },
+        // Legacy aliases — kept so old Google-color classes don't break
+        gblue:   { 50:'#EEF2FF', 100:'#E0E7FF', 200:'#C7D2FE', 400:'#818CF8', 500:'#4F46E5', 600:'#4338CA', 700:'#3730A3' },
+        ggreen:  { 50:'#ECFDF5', 100:'#D1FAE5', 400:'#34D399', 500:'#059669', 600:'#047857' },
+        gyellow: { 50:'#FFFBEB', 100:'#FEF3C7', 400:'#FBBF24', 500:'#F59E0B', 600:'#D97706' },
+        gred:    { 50:'#FEF2F2', 100:'#FEE2E2', 400:'#F87171', 500:'#EF4444', 600:'#DC2626' },
+        gpurple: { 50:'#F5F3FF', 100:'#EDE9FE', 400:'#A78BFA', 500:'#7C3AED', 600:'#6D28D9' },
+        gteal:   { 50:'#F0FDFA', 400:'#2DD4BF', 500:'#0D9488' },
       },
       fontFamily: {
-        sans: ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans KR', 'sans-serif'],
-        mono: ['Roboto Mono', 'Consolas', 'Monaco', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans KR', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'monospace'],
       },
       boxShadow: {
-        // Google's signature double-layer shadow
-        card:   '0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15)',
-        'card-hover': '0 1px 3px 0 rgba(60,64,67,.30), 0 4px 8px 3px rgba(60,64,67,.15)',
-        menu:   '0 2px 6px 2px rgba(60,64,67,.15), 0 1px 2px 0 rgba(60,64,67,.30)',
-        fab:    '0 1px 2px 0 rgba(60,64,67,.30), 0 2px 6px 2px rgba(60,64,67,.15)',
+        xs:   '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        sm:   '0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07)',
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07)',
+        'card-hover': '0 4px 12px 0 rgb(0 0 0 / 0.08), 0 1px 3px 0 rgb(0 0 0 / 0.06)',
+        menu: '0 4px 16px 0 rgb(0 0 0 / 0.10), 0 1px 4px 0 rgb(0 0 0 / 0.06)',
+        fab:  '0 2px 8px 0 rgb(0 0 0 / 0.12)',
       },
       borderRadius: {
-        'google': '8px',
+        google: '8px',
       },
     },
   },
