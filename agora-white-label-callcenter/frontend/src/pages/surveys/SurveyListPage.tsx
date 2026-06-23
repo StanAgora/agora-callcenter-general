@@ -6,7 +6,7 @@ import { ProgressBar } from '../../components/ui/ProgressBar'
 import { PlusCircle, LayoutDashboard, SlidersHorizontal, Sparkles, Loader2, Trash2, LayoutList, LayoutGrid, Copy } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = import.meta.env.VITE_API_URL ?? ''
+const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
 
 interface SurveyAPI {
   id: string

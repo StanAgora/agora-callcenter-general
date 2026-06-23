@@ -8,7 +8,7 @@ import type { VoicePromptData, StructuredOutputSchema, StructuredOutputVariable 
 type GenState = 'idle' | 'generating' | 'done' | 'saved' | 'error'
 type ViewMode = 'raw' | 'sections'
 
-const API = import.meta.env.VITE_API_URL ?? ''
+const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
 
 // Section keys in assembly order (greeting + failure_message are excluded from system prompt assembly)
 const SECTION_KEYS = [

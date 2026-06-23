@@ -9,7 +9,7 @@ import { bcp47ForI18n } from '../../i18n'
 import AgoraRTC from 'agora-rtc-sdk-ng'
 import AgoraRTM from 'agora-rtm-sdk'
 
-const API = import.meta.env.VITE_API_URL ?? ''
+const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
 
 // ── Types ─────────────────────────────────────────────────────────
 export interface Agent {

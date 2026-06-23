@@ -5,7 +5,7 @@ import { Loader2, PhoneCall, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { bcp47ForI18n } from '../../i18n'
 
-const API = import.meta.env.VITE_API_URL ?? ''
+const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
 const PAGE_SIZE = 50
 
 interface CallItem {

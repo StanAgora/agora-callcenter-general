@@ -10,7 +10,7 @@ import {
 import { Loader2, PhoneCall, PhoneIncoming, Clock, RefreshCw, Radio, LayoutDashboard, PieChart as PieChartIcon, Bot, StopCircle } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = import.meta.env.VITE_API_URL ?? ''
+const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
