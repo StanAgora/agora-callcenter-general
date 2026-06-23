@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
+const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

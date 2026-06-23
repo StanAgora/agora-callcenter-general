@@ -4,7 +4,7 @@ import { Loader2, PlusCircle, Trash2, PhoneCall, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { bcp47ForI18n } from '../../i18n'
 
-const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
+const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
 interface PhoneNumber {
   id: number

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CheckCircle2, Eye, EyeOff, Loader2 } from 'lucide-react'
 
-const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
+const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
 interface Settings {
   DATABASE_URL: string

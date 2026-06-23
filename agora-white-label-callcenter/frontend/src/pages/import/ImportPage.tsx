@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Upload, CloudUpload, Play, Square, RefreshCw, CheckCircle2, XCircle, Loader2, FileText, Trash2 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL.replace(//$/, '')
+const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
 interface ImportResult {
   campaigns_created: number
