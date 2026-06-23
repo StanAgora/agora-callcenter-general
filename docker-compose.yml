@@ -28,7 +28,7 @@ services:
     env_file:
       - ./.env
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://campaign:campaign123@taiwanpulse-postgres:5432/campaign_db}
+      DATABASE_URL: postgresql+asyncpg://campaign:campaign123@taiwanpulse-postgres:5432/campaign_db
     networks:
       - whip-network
     depends_on:
