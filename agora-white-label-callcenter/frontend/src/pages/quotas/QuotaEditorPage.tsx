@@ -27,7 +27,7 @@ function validateCsvText(text: string): { valid: boolean; count: number; errors:
   return { valid: errors.length === 0, count, errors }
 }
 
-const API = 'http://localhost:8000';
+const API = import.meta.env.VITE_API_URL ?? '';
 const SLIDER_MAX = 500;
 
 interface Cell {

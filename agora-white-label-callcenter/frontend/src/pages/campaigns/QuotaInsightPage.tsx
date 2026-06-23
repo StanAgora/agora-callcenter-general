@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Target, CheckCircle2, Loader2, AlertCircle, TrendingUp, BarChart3, Percent } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL ?? ''
 const QUOTA_INSIGHT_POLL_MS = 10_000
 
 interface QuotaHitEvidenceRow {

@@ -44,7 +44,7 @@ function filterByDate(
   return campaigns.filter(c => c.created_at && new Date(c.created_at) >= cutoff)
 }
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL ?? ''
 
 interface CampaignV2Item {
   id: number

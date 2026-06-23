@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL ?? ''
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

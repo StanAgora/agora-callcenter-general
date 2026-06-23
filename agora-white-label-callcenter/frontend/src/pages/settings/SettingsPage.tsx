@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CheckCircle2, Eye, EyeOff, Loader2 } from 'lucide-react'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL ?? ''
 
 interface Settings {
   DATABASE_URL: string

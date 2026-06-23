@@ -10,7 +10,7 @@ import { cn } from '../../lib/utils'
 import { campaignAgentSourceLabel, campaignQuotaModeLabel } from '../../lib/campaignDisplayLabels'
 import { bcp47ForI18n } from '../../i18n'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL ?? ''
 
 interface CampaignV2Detail {
   id: number
