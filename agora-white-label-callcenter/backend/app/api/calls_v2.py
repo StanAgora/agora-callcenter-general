@@ -212,7 +212,8 @@ async def _fetch_call_detail(client: httpx.AsyncClient, call_id: str) -> dict | 
 
 def _merge_upstream_detail_into_row(row: CallV2, d: dict) -> None:
     row.transcript = json.dumps(d.get('transcript') or [], ensure_ascii=False)
-    row.record_file_url = d.get('record_file_url') or None
+    if not (row.record_file_url and row.record_file_url.startswith('s3://')):
+        row.record_file_url = d.get('record_file_url') or None
     if d.get('from_number') and not row.from_number:
         row.from_number = str(d['from_number']).strip() or None
     if d.get('call_category'):
