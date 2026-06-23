@@ -837,8 +837,8 @@ export function CampaignDetailPage() {
 
             {callsTotal > 0 && (
               <div className="overflow-x-auto">
-                <div className="min-w-[1300px] divide-y divide-gray-100">
-                  <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400 font-medium grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_72px_92px] gap-2">
+                <div className="min-w-[1620px] divide-y divide-gray-100">
+                  <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400 font-medium grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_300px_72px_92px] gap-2">
                   <span>{t('agora.th_status')}</span>
                   <span>{t('agora.th_to')}</span>
                   <span>{t('agora.th_type')}</span>
@@ -846,13 +846,14 @@ export function CampaignDetailPage() {
                   <span>{t('agora.th_hangup')}</span>
                   <span>{t('agora.th_duration')}</span>
                   <span>{t('agora.th_session')}</span>
+                  <span>Call ID</span>
                   <span>樣本</span>
                   <span className="text-right pr-1">{t('agora.th_actions')}</span>
                 </div>
                 {pageItems.map(c => {
                   const st = categoryStyle(c.call_category)
                   return (
-                    <div key={c.call_id} className="px-4 py-2 hover:bg-gray-50 transition-colors grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_72px_92px] gap-2 items-center">
+                    <div key={c.call_id} className="px-4 py-2 hover:bg-gray-50 transition-colors grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_300px_72px_92px] gap-2 items-center">
                       <div className="flex items-center justify-start">
                         <span className={cn('w-2.5 h-2.5 rounded-full', st.dot)} title={c.call_category ?? 'unknown'} />
                       </div>
@@ -873,6 +874,9 @@ export function CampaignDetailPage() {
                       </span>
                       <span className="text-[11px] text-gray-600 font-mono truncate" title={c.agent_session_id ?? ''}>
                           {c.agent_session_id ?? '—'}
+                      </span>
+                      <span className="text-[11px] text-gray-500 font-mono break-all">
+                        {c.call_id}
                       </span>
                       <div className="flex items-center">
                         {c.call_success == null ? null : c.call_success ? (

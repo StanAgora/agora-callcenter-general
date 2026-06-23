@@ -17,6 +17,7 @@ interface CallItem {
   hangup_reason: string | null
   duration_seconds: number | null
   call_ts: number | null
+  start_ts: number | null
   end_ts: number | null
   has_transcript: boolean
   has_structured_output: boolean
@@ -116,6 +117,8 @@ export function CallHistoryPage() {
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('call_history.col_hangup')}</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('call_history.col_duration')}</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('call_history.col_time')}</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">Start Time</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">Call ID</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('call_history.col_campaign')}</th>
               </tr>
             </thead>
@@ -140,6 +143,12 @@ export function CallHistoryPage() {
                     <td className="px-4 py-3 text-xs text-gray-600">{fmtDuration(c.duration_seconds)}</td>
                     <td className="px-4 py-3 text-xs text-gray-400 whitespace-nowrap">
                       {fmtTs(c.call_ts, i18n.language)}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-gray-400 whitespace-nowrap">
+                      {fmtTs(c.start_ts, i18n.language)}
+                    </td>
+                    <td className="px-4 py-3 text-xs font-mono text-gray-400 break-all">
+                      {c.call_id}
                     </td>
                     <td className="px-4 py-3 text-xs font-mono text-gray-400 truncate max-w-[160px]">
                       {c.campaign_id}
