@@ -243,7 +243,7 @@ const ja = {
   },
   agora: {
     list_title: 'キャンペーン',
-    list_subtitle: 'Agora で作成した発信キャンペーン',
+    list_subtitle: 'すべての発信キャンペーン',
     loading: '読み込み中...',
     empty: 'キャンペーンはまだありません',
     empty_hint: '右上の「New Campaign」から作成してください',

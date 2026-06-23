@@ -243,7 +243,7 @@ const zh = {
   },
   agora: {
     list_title: '外呼任務',
-    list_subtitle: '所有透過 Agora 建立的外呼任務',
+    list_subtitle: '所有建立的外呼任務',
     loading: '載入中...',
     empty: '尚無任務',
     empty_hint: '點擊右上角「New Campaign」建立第一個',

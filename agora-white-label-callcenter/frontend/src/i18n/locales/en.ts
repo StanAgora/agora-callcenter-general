@@ -243,7 +243,7 @@ const en = {
   },
   agora: {
     list_title: 'Campaigns',
-    list_subtitle: 'Outbound campaigns created with Agora',
+    list_subtitle: 'All outbound campaigns',
     loading: 'Loading...',
     empty: 'No campaigns yet',
     empty_hint: 'Create one with "New Campaign" in the top right',

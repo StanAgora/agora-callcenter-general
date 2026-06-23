@@ -243,7 +243,7 @@ const ko = {
   },
   agora: {
     list_title: '캠페인',
-    list_subtitle: 'Agora로 만든 아웃바운드 캠페인',
+    list_subtitle: '모든 아웃바운드 캠페인',
     loading: '로딩 중...',
     empty: '캠페인이 없습니다',
     empty_hint: '오른쪽 위 "New Campaign"으로 첫 캠페인을 만드세요',
