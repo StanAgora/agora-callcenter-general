@@ -287,7 +287,7 @@ export function CampaignsPage() {
                         st.chip
                       )}>
                         {st.dot && <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse', st.dot)} />}
-                        {statusLabel[status] ?? status}
+                        {statusLabel[status as keyof typeof statusLabel] ?? status}
                       </span>
                       <div className="flex items-center gap-1">
                         {/* Delete button (imported campaigns only) */}

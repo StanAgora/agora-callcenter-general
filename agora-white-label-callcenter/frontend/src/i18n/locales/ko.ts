@@ -298,7 +298,6 @@ const ko = {
     th_duration: '시간',
     th_session: '에이전트 세션',
     th_actions: '작업',
-    th_session: '에이전트 세션',
     tt_transcript: '전사 보기',
     tt_structured: '구조화 출력 보기',
     tt_recording: '녹음 받기',

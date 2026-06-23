@@ -522,47 +522,6 @@ export function AgentsPage() {
     })
   }
 
-  function TextCell({ label, content, kind }: { label: string; content: string | null; kind: 'system' | 'greeting' }) {
-    if (!content) {
-      return <span className="text-gray-300 text-xs">—</span>
-    }
-    const isSystem = kind === 'system'
-    return (
-      <button
-        type="button"
-        onClick={() => setTextModal({ title: label, content })}
-        className="group w-full max-w-[min(300px,100%)] text-left"
-        title={t('common.view_full')}
-      >
-        <div
-          className={cn(
-            'flex items-start gap-1.5 rounded-md border py-0.5 pl-1 pr-1.5 transition-colors',
-            isSystem
-              ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100'
-              : 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100',
-          )}
-        >
-          <span
-            className={cn(
-              'mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center self-start rounded',
-              isSystem ? 'bg-indigo-100 text-indigo-600' : 'bg-emerald-100 text-emerald-600',
-            )}
-          >
-            {isSystem ? <FileText className="h-2.5 w-2.5" /> : <MessageCircle className="h-2.5 w-2.5" />}
-          </span>
-          <p
-            className={cn(
-              'line-clamp-2 min-h-0 min-w-0 max-w-full flex-1 text-[11px] leading-snug text-gray-600',
-              isSystem && 'font-mono',
-            )}
-          >
-            {content}
-          </p>
-        </div>
-      </button>
-    )
-  }
-
   return (
     <div className="p-8 bg-gray-50 min-h-full">
       <div className="flex items-center justify-between mb-6">

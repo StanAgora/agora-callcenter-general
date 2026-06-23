@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Brain, Loader2, AlertCircle, ChevronLeft, CheckCircle2, Wand2, Save, Phone, Upload, CheckCircle } from 'lucide-react'
+import { Brain, Loader2, AlertCircle, ChevronLeft, CheckCircle2, Wand2, Save, Phone, Upload } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 const PHONE_RE = /^\+\d{7,15}$/

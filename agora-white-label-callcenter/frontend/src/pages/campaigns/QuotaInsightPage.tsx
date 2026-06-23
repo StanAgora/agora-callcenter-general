@@ -81,7 +81,7 @@ export function QuotaInsightPage() {
         const c = campData?.local ? { ...campData.local, ...campData.detail } : campData
         setCampaign({
           campaign_id: id,
-          campaign_name: c.campaign_name ?? id,
+          campaign_name: c.campaign_name ?? id ?? '',
           status: c.status ?? null,
         })
         if (initial) {

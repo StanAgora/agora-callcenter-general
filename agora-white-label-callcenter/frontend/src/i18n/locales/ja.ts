@@ -298,7 +298,6 @@ const ja = {
     th_duration: '時間',
     th_session: 'Agent セッション',
     th_actions: '操作',
-    th_session: 'Agent セッション',
     tt_transcript: '文字起こしを見る',
     tt_structured: '構造化出力を見る',
     tt_recording: '録音をダウンロード',

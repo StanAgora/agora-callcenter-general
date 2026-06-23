@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useTranslation, type TFunction } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import {
   ArrowLeft, Loader2, StopCircle, RefreshCw, Phone, MessageSquare, Database, Download, X,
   PhoneCall, PhoneOutgoing, Voicemail, PhoneMissed, CircleAlert, Timer, Copy,
@@ -146,10 +147,6 @@ function fmtDateLocale(s: string | null, lng: string) {
   return new Date(s).toLocaleString(bcp47ForI18n(lng))
 }
 
-function fmtTsLocale(ts: number | null, lng: string) {
-  if (!ts) return '—'
-  return new Date(ts * 1000).toLocaleString(bcp47ForI18n(lng))
-}
 
 function isCampaignTerminalStatus(status: string | null | undefined) {
   const st = (status ?? '').toLowerCase()
@@ -508,7 +505,7 @@ export function CampaignDetailPage() {
             <h1 className="text-lg font-bold text-gray-900 truncate">{campaign.campaign_name}</h1>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <span className={cn('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', STATUS_STYLE[status] ?? 'bg-gray-100 text-gray-500')}>
-                {statusLabel[status] ?? status}
+                {statusLabel[status as keyof typeof statusLabel] ?? status}
               </span>
               {campaign.questionnaire_type && (
                 <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-700">
@@ -748,7 +745,7 @@ export function CampaignDetailPage() {
                 <InfoRow label={t('agora.label_max_ring')} value={fmtSecondsI18n(t, campaign.ring_timeout_seconds)} />
               </Card>
 
-              {campaign.structured_output && (
+              {campaign.structured_output != null && (
                 <Card title="Structured Output">
                   <pre className="text-xs text-gray-600 bg-gray-50 rounded-lg p-3 overflow-x-auto leading-relaxed border border-gray-100">
                     {JSON.stringify(campaign.structured_output, null, 2)}
