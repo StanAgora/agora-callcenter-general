@@ -1,0 +1,43 @@
+# 與 quick-deploy.sh 配套：不向宿主機發布任何端口（僅 whip-network 內可達 :8080 / :5432）。
+# 前置網關須與 taiwanpulse-app 同網。
+services:
+  taiwanpulse-postgres:
+    image: postgres:16-alpine
+    container_name: taiwanpulse-postgres
+    environment:
+      POSTGRES_USER: campaign
+      POSTGRES_PASSWORD: campaign123
+      POSTGRES_DB: campaign_db
+    volumes:
+      - taiwanpulse-pgdata:/var/lib/postgresql/data
+    networks:
+      - whip-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U campaign -d campaign_db']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  taiwanpulse-app:
+    container_name: taiwanpulse-app
+    build:
+      context: ./agora-white-label-callcenter
+      dockerfile: Dockerfile
+      args:
+        TAIWANPULSE_VITE_BASE_PATH: ${TAIWANPULSE_VITE_BASE_PATH:-/}
+    env_file:
+      - ./agora-white-label-callcenter/backend/.env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://campaign:campaign123@taiwanpulse-postgres:5432/campaign_db}
+    networks:
+      - whip-network
+    depends_on:
+      taiwanpulse-postgres:
+        condition: service_healthy
+
+volumes:
+  taiwanpulse-pgdata:
+
+networks:
+  whip-network:
+    external: true
