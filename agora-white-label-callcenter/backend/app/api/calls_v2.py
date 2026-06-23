@@ -491,21 +491,17 @@ async def sync_calls_v2_upstream(db: AsyncSession, campaign_id: str) -> dict:
 
     upstream = await _fetch_incremental_calls(campaign_id, last_from_time)
 
-    # Watermark uses end_ts (converted to seconds) — API filters completed calls by end_ts.
-    max_end_ts: int | None = None
+    # Watermark uses start_ts — captures in-progress calls that have no end_ts yet.
+    # The stored watermark is max(start_ts) - 5 s so the next sync re-queries a
+    # 5-second overlap and never misses a call whose start_ts arrived slightly late.
+    max_start_ts: int | None = None
     for c in upstream:
-        ts = c.get('end_ts')
-        if isinstance(ts, int) and ts > 0:
-            ts_s = _to_seconds(ts)
-            max_end_ts = ts_s if max_end_ts is None else max(max_end_ts, ts_s)
-        else:
-            # Fallback when end_ts is absent.
-            for k in ('answered_ts', 'start_ts', 'call_ts'):
-                t2 = c.get(k)
-                if isinstance(t2, int) and t2 > 0:
-                    t2_s = _to_seconds(t2)
-                    max_end_ts = t2_s if max_end_ts is None else max(max_end_ts, t2_s)
-                    break
+        for k in ('start_ts', 'call_ts', 'answered_ts'):
+            t = c.get(k)
+            if isinstance(t, int) and t > 0:
+                t_s = _to_seconds(t)
+                max_start_ts = t_s if max_start_ts is None else max(max_start_ts, t_s)
+                break
 
     call_ids = [c.get('call_id') for c in upstream if c.get('call_id')]
     existing: dict[str, CallV2] = {}
@@ -520,10 +516,8 @@ async def sync_calls_v2_upstream(db: AsyncSession, campaign_id: str) -> dict:
         cid = c.get('call_id')
         if not cid:
             continue
-        end_ts = c.get('end_ts')
-        if not isinstance(end_ts, int) or end_ts <= 0:
-            continue
         start_ts = c.get('start_ts')
+        end_ts = c.get('end_ts')
         structured = c.get('structured_output')
         raw_so_status = c.get('structured_output_status')
         if raw_so_status is None or (isinstance(raw_so_status, str) and raw_so_status.strip() == ''):
@@ -573,8 +567,10 @@ async def sync_calls_v2_upstream(db: AsyncSession, campaign_id: str) -> dict:
     if need_detail:
         await merge_upstream_call_details(db, list(need_detail))
 
-    if max_end_ts is not None:
-        watermark = max_end_ts  # already in seconds
+    if max_start_ts is not None:
+        # Store max_start_ts - 5 s so the next sync re-queries from 5 s before the
+        # latest known start_ts, catching any calls whose timestamps arrived slightly late.
+        watermark = max(0, max_start_ts - 5)
         if state is None:
             state = CallV2SyncState(campaign_id=campaign_id, last_call_ts=watermark)
             db.add(state)
@@ -604,4 +600,16 @@ async def sync_calls(
     if not refresh:
         return {'campaign_id': campaign_id, 'count': 0, 'items': []}
     return await sync_calls_v2_upstream(db, campaign_id)
+
+
+@router.delete('/{campaign_id}/sync-state')
+async def reset_sync_state(campaign_id: str, db: AsyncSession = Depends(get_db)):
+    """Clear the sync watermark so the next sync re-fetches all calls from the beginning."""
+    state = (await db.execute(
+        select(CallV2SyncState).where(CallV2SyncState.campaign_id == campaign_id)
+    )).scalar_one_or_none()
+    if state is not None:
+        state.last_call_ts = None
+        await db.commit()
+    return {'campaign_id': campaign_id, 'reset': True}
 
