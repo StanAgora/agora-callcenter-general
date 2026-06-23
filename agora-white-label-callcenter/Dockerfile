@@ -2,7 +2,7 @@
 FROM node:20-alpine AS frontend-build
 WORKDIR /build/frontend
 COPY frontend/package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY frontend/ .
 ARG TAIWANPULSE_VITE_BASE_PATH=/
 RUN npx tsc -b && npx vite build --base="${TAIWANPULSE_VITE_BASE_PATH}"
