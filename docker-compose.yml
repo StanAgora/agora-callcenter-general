@@ -26,7 +26,7 @@ services:
       args:
         TAIWANPULSE_VITE_BASE_PATH: ${TAIWANPULSE_VITE_BASE_PATH:-/}
     env_file:
-      - ./agora-white-label-callcenter/backend/.env
+      - ./.env
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://campaign:campaign123@taiwanpulse-postgres:5432/campaign_db}
     networks:

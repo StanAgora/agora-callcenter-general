@@ -17,7 +17,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 COMPOSE_FILE="${SCRIPT_DIR}/docker-compose.yml"
-ENV_FILE="${SCRIPT_DIR}/agora-white-label-callcenter/backend/.env"
+ENV_FILE="${SCRIPT_DIR}/.env"
 DEFAULT_PREFIX="/taiwanpulse/"
 TAIWANPULSE_PREFIX="${TAIWANPULSE_PREFIX:-$DEFAULT_PREFIX}"
 
@@ -29,7 +29,7 @@ fi
 if [[ ! -f "$ENV_FILE" ]]; then
   echo "錯誤: 未找到 ${ENV_FILE}"
   echo "請先執行:"
-  echo "  cp agora-white-label-callcenter/backend/.env.example agora-white-label-callcenter/backend/.env"
+  echo "  cp agora-white-label-callcenter/backend/.env.example .env"
   echo "並填寫 AGORA_*、OPENAI_API_KEY、ANTHROPIC_API_KEY 等變量後重試。"
   exit 1
 fi
