@@ -1,10 +1,48 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Loader2, Plus, Radio, StopCircle, LayoutDashboard, PieChart, Bot } from 'lucide-react'
+import { Loader2, Plus, Radio, StopCircle, LayoutDashboard, PieChart, CalendarRange, Trash2 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { campaignAgentSourceLabel, campaignQuotaModeLabel } from '../../lib/campaignDisplayLabels'
 import { bcp47ForI18n } from '../../i18n'
+
+type DateFilter = 'today' | '7d' | '14d' | '30d' | 'all' | 'custom'
+
+const DATE_FILTERS: { key: DateFilter; label: string }[] = [
+  { key: 'today',  label: 'Today' },
+  { key: '7d',     label: '7 Days' },
+  { key: '14d',    label: '14 Days' },
+  { key: '30d',    label: '30 Days' },
+  { key: 'all',    label: 'All' },
+  { key: 'custom', label: 'Custom' },
+]
+
+function startOfDay(d: Date) {
+  const r = new Date(d); r.setHours(0, 0, 0, 0); return r
+}
+
+function filterByDate(
+  campaigns: { created_at: string | null }[],
+  filter: DateFilter,
+  customFrom: string,
+  customTo: string,
+) {
+  if (filter === 'all') return campaigns
+  if (filter === 'custom') {
+    const from = customFrom ? new Date(customFrom) : null
+    const to   = customTo   ? new Date(customTo + 'T23:59:59') : null
+    return campaigns.filter(c => {
+      if (!c.created_at) return false
+      const d = new Date(c.created_at)
+      if (from && d < from) return false
+      if (to   && d > to)   return false
+      return true
+    })
+  }
+  const days = filter === 'today' ? 0 : filter === '7d' ? 7 : filter === '14d' ? 14 : 30
+  const cutoff = startOfDay(new Date(Date.now() - days * 86400000))
+  return campaigns.filter(c => c.created_at && new Date(c.created_at) >= cutoff)
+}
 
 const API = 'http://localhost:8000'
 
@@ -26,6 +64,7 @@ interface CampaignV2Item {
   status: string | null
   created_at: string | null
   updated_at: string | null
+  is_imported: boolean | null
 }
 
 // Clean white minimal status chips
@@ -57,6 +96,15 @@ export function CampaignsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [interruptingId, setInterruptingId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [dateFilter, setDateFilter] = useState<DateFilter>('all')
+  const [customFrom, setCustomFrom] = useState('')
+  const [customTo, setCustomTo] = useState('')
+
+  const visibleCampaigns = useMemo(
+    () => filterByDate(campaigns, dateFilter, customFrom, customTo) as CampaignV2Item[],
+    [campaigns, dateFilter, customFrom, customTo],
+  )
 
   async function loadCampaigns() {
     try {
@@ -105,6 +153,20 @@ export function CampaignsPage() {
     }
   }
 
+  async function handleDelete(campaignId: string, campaignName: string) {
+    if (!confirm(`確定要刪除匯入的 Campaign「${campaignName}」嗎？\n此操作將同時刪除所有相關通話記錄，且無法復原。`)) return
+    setDeletingId(campaignId)
+    try {
+      const resp = await fetch(`${API}/api/import/campaign/${campaignId}`, { method: 'DELETE' })
+      if (!resp.ok) throw new Error()
+      setCampaigns(prev => prev.filter(c => c.campaign_id !== campaignId))
+    } catch {
+      alert('刪除失敗，請稍後再試')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   function formatDate(iso: string | null) {
     if (!iso) return '—'
     return new Date(iso).toLocaleString(bcp47ForI18n(i18n.language), {
@@ -114,9 +176,9 @@ export function CampaignsPage() {
   }
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-full flex flex-col">
       {/* Page header */}
-      <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
+      <div className="glass-bar px-6 py-4 flex items-center justify-between flex-shrink-0">
         <div>
           <h1 className="text-lg font-medium text-gray-900">{t('agora.list_title')}</h1>
           <p className="text-sm text-gray-400 mt-0.5">{t('agora.list_subtitle')}</p>
@@ -128,6 +190,43 @@ export function CampaignsPage() {
           <Plus size={16} strokeWidth={2.5} />
           {t('nav.new_campaign')}
         </Link>
+      </div>
+
+      {/* Date filter bar */}
+      <div className="glass-bar px-6 py-3 flex items-center gap-2 flex-shrink-0 flex-wrap">
+        {DATE_FILTERS.map(f => (
+          <button
+            key={f.key}
+            onClick={() => setDateFilter(f.key)}
+            className={cn(
+              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+              dateFilter === f.key
+                ? 'bg-indigo-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+            )}
+          >
+            {f.key === 'custom' && <CalendarRange size={12} />}
+            {f.label}
+          </button>
+        ))}
+        {dateFilter === 'custom' && (
+          <div className="flex items-center gap-2 ml-2">
+            <input
+              type="date"
+              value={customFrom}
+              onChange={e => setCustomFrom(e.target.value)}
+              className="border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            />
+            <span className="text-xs text-gray-400">—</span>
+            <input
+              type="date"
+              value={customTo}
+              onChange={e => setCustomTo(e.target.value)}
+              className="border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            />
+          </div>
+        )}
+        <span className="ml-auto text-xs text-gray-400">{visibleCampaigns.length} campaigns</span>
       </div>
 
       {/* Content */}
@@ -143,7 +242,7 @@ export function CampaignsPage() {
           <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-600">{error}</div>
         )}
 
-        {!loading && !error && campaigns.length === 0 && (
+        {!loading && !error && visibleCampaigns.length === 0 && (
           <div className="bg-white border border-gray-100 rounded-xl p-16 text-center shadow-sm">
             <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4">
               <Radio size={28} className="text-indigo-600" />
@@ -153,10 +252,10 @@ export function CampaignsPage() {
           </div>
         )}
 
-        {!loading && !error && campaigns.length > 0 && (
+        {!loading && !error && visibleCampaigns.length > 0 && (
           <div className="overflow-x-auto">
           <div className="grid grid-cols-3 xl:grid-cols-5 gap-4 min-w-[640px]">
-            {campaigns.map(c => {
+            {visibleCampaigns.map(c => {
               const status = c.status ?? 'pending'
               const isTerminal = status === 'completed' || status === 'interrupted' || status === 'interrupt' || status === 'failed'
               const total = Math.max(0, Number(c.total_numbers ?? 0))
@@ -167,7 +266,7 @@ export function CampaignsPage() {
               return (
                 <div
                   key={c.campaign_id}
-                  className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+                  className="glass-card flex flex-col overflow-hidden"
                 >
                   {/* Subtle top accent strip */}
                   <div className="h-0.5" style={{
@@ -190,22 +289,37 @@ export function CampaignsPage() {
                         {st.dot && <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse', st.dot)} />}
                         {statusLabel[status] ?? status}
                       </span>
-                      {/* Interrupt button */}
-                      <button
-                        onClick={() => handleInterrupt(c.campaign_id)}
-                        disabled={isTerminal || interruptingId === c.campaign_id}
-                        title="Interrupt"
-                        className={cn(
-                          'flex items-center justify-center w-7 h-7 rounded-full transition-colors',
-                          isTerminal
-                            ? 'text-gray-300 cursor-not-allowed'
-                            : 'text-red-500 hover:bg-red-50'
+                      <div className="flex items-center gap-1">
+                        {/* Delete button (imported campaigns only) */}
+                        {c.is_imported && (
+                          <button
+                            onClick={() => handleDelete(c.campaign_id, c.campaign_name)}
+                            disabled={deletingId === c.campaign_id}
+                            title="刪除"
+                            className="flex items-center justify-center w-7 h-7 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                          >
+                            {deletingId === c.campaign_id
+                              ? <Loader2 size={14} className="animate-spin" />
+                              : <Trash2 size={14} />}
+                          </button>
                         )}
-                      >
-                        {interruptingId === c.campaign_id
-                          ? <Loader2 size={14} className="animate-spin" />
-                          : <StopCircle size={14} />}
-                      </button>
+                        {/* Interrupt button */}
+                        <button
+                          onClick={() => handleInterrupt(c.campaign_id)}
+                          disabled={isTerminal || interruptingId === c.campaign_id}
+                          title="Interrupt"
+                          className={cn(
+                            'flex items-center justify-center w-7 h-7 rounded-full transition-colors',
+                            isTerminal
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-red-500 hover:bg-red-50'
+                          )}
+                        >
+                          {interruptingId === c.campaign_id
+                            ? <Loader2 size={14} className="animate-spin" />
+                            : <StopCircle size={14} />}
+                        </button>
+                      </div>
                     </div>
 
                     <h2 className="font-medium text-gray-900 text-sm leading-snug line-clamp-2 mb-0.5">
@@ -269,7 +383,7 @@ export function CampaignsPage() {
                   </div>
 
                   {/* Actions footer */}
-                  <div className="border-t border-gray-100 grid grid-cols-3">
+                  <div className="mt-auto border-t border-gray-100 grid grid-cols-2">
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}`)}
                       className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
@@ -278,15 +392,9 @@ export function CampaignsPage() {
                     </button>
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}/quota-insight`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors border-r border-gray-100"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
                     >
                       <PieChart size={13} /> Quota
-                    </button>
-                    <button
-                      onClick={() => navigate(`/campaigns/${c.campaign_id}/agent-prompt`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-                    >
-                      <Bot size={13} /> Prompt
                     </button>
                   </div>
                 </div>

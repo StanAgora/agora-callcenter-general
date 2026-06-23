@@ -39,3 +39,7 @@ class CallV2(Base):
     quota_checked: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     quota_check_detail: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON: status, llm, hits, error
 
+    # CSV import metadata
+    is_imported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, server_default='false')
+    original_record_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+

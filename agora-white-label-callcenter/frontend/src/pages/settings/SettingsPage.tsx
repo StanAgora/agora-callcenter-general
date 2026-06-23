@@ -48,7 +48,7 @@ function Field({
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white font-mono"
+          className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent bg-white/60 backdrop-blur-sm font-mono text-slate-800"
         />
         {isPassword && (
           <button type="button" onClick={() => setShow(s => !s)}
@@ -63,8 +63,8 @@ function Field({
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 space-y-5">
-      <h2 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3">{title}</h2>
+    <div className="glass-card p-6 space-y-5">
+      <h2 className="text-sm font-semibold text-slate-900 border-b border-white/50 pb-3">{title}</h2>
       {children}
     </div>
   )
@@ -127,37 +127,10 @@ export function SettingsPage() {
 
       <div className="space-y-5">
 
-        {/* Agora Call Agent */}
-        <Section title="Agora Call Agent API">
-          <Field
-            label="API Key"
-            desc="Authorization header 里的 Base64 编码 Key"
-            value={cfg.AGORA_API_KEY}
-            onChange={set('AGORA_API_KEY')}
-            placeholder="NWFl..."
-            type="password"
-          />
-          <Field
-            label="Pipeline ID"
-            desc="创建 Campaign 时绑定的 Pipeline"
-            value={cfg.AGORA_PIPELINE_ID}
-            onChange={set('AGORA_PIPELINE_ID')}
-            placeholder="d2936d99..."
-          />
-          <Field
-            label="Phone Number（主叫号码）"
-            desc="外呼时使用的主叫电话号码"
-            value={cfg.AGORA_PHONE_NUMBER}
-            onChange={set('AGORA_PHONE_NUMBER')}
-            placeholder="031186778285"
-          />
-        </Section>
-
         {/* Claude AI */}
         <Section title="Claude AI（Anthropic）">
           <Field
             label="Anthropic API Key"
-            desc="用于 AI 生成问卷脚本和配额建议"
             value={cfg.ANTHROPIC_API_KEY}
             onChange={set('ANTHROPIC_API_KEY')}
             placeholder="sk-ant-..."
@@ -209,18 +182,6 @@ export function SettingsPage() {
               type="number"
             />
           </div>
-        </Section>
-
-        {/* Webhook */}
-        <Section title="Webhook">
-          <Field
-            label="Webhook Secret"
-            desc="HMAC-SHA256 签名密钥，用于结果回调验签"
-            value={cfg.WEBHOOK_SECRET}
-            onChange={set('WEBHOOK_SECRET')}
-            placeholder="whsec_..."
-            type="password"
-          />
         </Section>
 
         {/* Save */}

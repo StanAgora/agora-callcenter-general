@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Eye, EyeOff, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { login } from '../../lib/auth'
 import { LANGUAGES, setLang, type Lang } from '../../i18n'
-import agoraLogo from '../../assets/agora-logo-2.webp'
+import agoraLogo from '../../assets/Logo-frontPage.png'
+import taipeiBg from '../../assets/101.webp'
+import twFlag from '../../assets/tw-flag.png'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -14,6 +16,8 @@ export function LoginPage() {
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
+  const currentLang = LANGUAGES.find(l => l.code === i18n.language) ?? LANGUAGES[0]
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -31,27 +35,54 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundImage: `url(${taipeiBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+    >
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <img src={agoraLogo} alt="Agora" className="h-8 w-auto object-contain mb-3" />
-          <p className="text-sm text-gray-400">Call Center Management</p>
+          <img src={agoraLogo} alt="Agora" className="h-40 w-auto object-contain mb-3" />
         </div>
 
         {/* Language selector */}
         <div className="flex justify-center mb-4">
-          <select
-            value={i18n.language}
-            onChange={e => setLang(e.target.value as Lang)}
-            className="px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer"
-          >
-            {LANGUAGES.map(({ code, flag, label }) => (
-              <option key={code} value={code}>
-                {flag} {label}
-              </option>
-            ))}
-          </select>
+          {langOpen && (
+            <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
+          )}
+          <div className="relative z-50">
+            <button
+              onClick={() => setLangOpen(o => !o)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+            >
+              {currentLang.code === 'zh'
+                ? <img src={twFlag} alt="TW" className="w-4 h-auto" />
+                : <span className="text-sm leading-none">{currentLang.flag}</span>
+              }
+              <span>{currentLang.label}</span>
+              <ChevronDown size={12} className="text-gray-400" />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full mt-1 left-0 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-full">
+                {LANGUAGES.map(({ code, flag, label }) => (
+                  <button
+                    key={code}
+                    onClick={() => { setLang(code as Lang); setLangOpen(false) }}
+                    className={[
+                      'flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-gray-50',
+                      i18n.language === code ? 'text-indigo-600 font-medium bg-indigo-50' : 'text-gray-600',
+                    ].join(' ')}
+                  >
+                    {code === 'zh'
+                      ? <img src={twFlag} alt="TW" className="w-4 h-auto" />
+                      : <span className="text-sm leading-none">{flag}</span>
+                    }
+                    <span>{label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Card */}
@@ -114,8 +145,6 @@ export function LoginPage() {
             </button>
           </form>
         </div>
-
-        <p className="text-center text-xs text-gray-300 mt-6">Powered by Agora</p>
       </div>
     </div>
   )

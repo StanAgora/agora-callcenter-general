@@ -34,7 +34,7 @@ const en = {
     campaigns: 'Campaigns',
     new_campaign: 'New Campaign',
     settings: 'Settings',
-    subtitle: 'AGORA CALL CENTER API DEMO, NOT FOR PRODUCTION USE.',
+    subtitle: '',
   },
   status: {
     draft: 'Draft',
@@ -231,13 +231,15 @@ const en = {
     btn_save: 'Save Settings',
     saved: 'Settings saved',
   },
-  // ── App routes & Agora (/) ────────────────────────────────────────
   app_nav: {
+    dashboard: 'Dashboard',
     campaigns: 'Outbound Campaigns',
     phone_numbers: 'Phone Numbers',
-    agents: 'Agent',
+    agents: 'Agents',
     call_history: 'Call History',
+    inbound_routing: 'Inbound Routing',
     sample: 'Sample',
+    import: 'Import / Migrate',
   },
   agora: {
     list_title: 'Campaigns',
@@ -317,6 +319,7 @@ const en = {
     stat_no_answer: 'No Answer',
     stat_failed: 'Failed',
     stat_total_duration: 'Total Duration',
+    duplicate: 'Duplicate',
   },
   agents: {
     page_subtitle: 'Manage Conversational AI agents',

@@ -26,5 +26,12 @@ class Settings(BaseSettings):
     quota_transcript_eval_poll_interval_seconds: int = 20
     quota_transcript_eval_poll_batch_limit: int = 200
 
+    # AWS S3 (for audio migration)
+    aws_access_key_id: str = ''
+    aws_secret_access_key: str = ''
+    aws_s3_bucket: str = 'taiwanplus'
+    aws_s3_region: str = 'ap-southeast-1'
+    aws_s3_prefix: str = 'recordings/'
+
 
 settings = Settings()

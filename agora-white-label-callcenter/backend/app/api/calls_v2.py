@@ -152,6 +152,18 @@ def _serialize(row: CallV2) -> dict:
     }
 
 def _serialize_light(row: CallV2) -> dict:
+    # Extract call_success from structured_output JSON without full parse overhead
+    call_success = None
+    if row.structured_output:
+        try:
+            so = json.loads(row.structured_output)
+            if isinstance(so, dict):
+                call_success = so.get('call_success')
+            elif isinstance(so, list) and so and isinstance(so[0], dict):
+                call_success = so[0].get('call_success')
+        except Exception:
+            pass
+
     return {
         'sip_call_id': row.sip_call_id,
         'call_id': row.call_id,
@@ -176,6 +188,7 @@ def _serialize_light(row: CallV2) -> dict:
             row.structured_output_status,
             row.call_category,
         ),
+        'call_success': call_success,
     }
 
 

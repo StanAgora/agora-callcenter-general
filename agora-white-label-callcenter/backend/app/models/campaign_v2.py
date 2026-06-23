@@ -43,3 +43,7 @@ class CampaignV2(Base):
     status: Mapped[str | None] = mapped_column(String(32), nullable=True)
     created_at: Mapped[str | None] = mapped_column(String(64), nullable=True)
     updated_at: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+    # CSV import metadata
+    is_imported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, server_default='false')
+    imported_at: Mapped[str | None] = mapped_column(Text, nullable=True)

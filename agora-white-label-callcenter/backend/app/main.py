@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.database import init_db
-from app.api import websocket, settings_api, phone_numbers, agents, campaigns_v2, quota_v2, calls_v2, agora_campaigns, inbound_routing, dashboard
+from app.api import websocket, settings_api, phone_numbers, agents, campaigns_v2, quota_v2, calls_v2, agora_campaigns, inbound_routing, dashboard, live_test, import_csv
 from app.services.calls_structured_output_poll import start_structured_output_poll
 from app.services.quota_transcript_eval_poll import start_quota_transcript_eval_poll
 
@@ -37,6 +37,8 @@ app.include_router(calls_v2.router)
 app.include_router(agora_campaigns.router)
 app.include_router(inbound_routing.router)
 app.include_router(dashboard.router)
+app.include_router(live_test.router)
+app.include_router(import_csv.router)
 
 
 @app.get('/health')

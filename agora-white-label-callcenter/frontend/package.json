@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.96.0",
+    "agora-rtc-sdk-ng": "^4.24.4",
+    "agora-rtm-sdk": "^2.2.4",
     "clsx": "^2.1.1",
     "i18next": "^26.0.3",
     "lucide-react": "^1.7.0",

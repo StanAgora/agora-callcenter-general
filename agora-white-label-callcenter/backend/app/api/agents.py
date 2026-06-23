@@ -224,6 +224,41 @@ def _extract_list_items(body: dict) -> list[dict]:
     return []
 
 
+class CreateAgentWithPropertiesRequest(BaseModel):
+    agent_name: str
+    properties: dict
+
+
+@router.post('/create-with-properties')
+async def create_agent_with_properties(
+    body: CreateAgentWithPropertiesRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    payload = {
+        'agent_name': body.agent_name,
+        'agent_type': 'CALL_AGENT',
+        'properties': body.properties,
+    }
+
+    async with httpx.AsyncClient(timeout=15) as client:
+        resp = await client.post(AGENT_BASE_URL, json=payload, headers=_headers())
+
+    if resp.status_code not in (200, 201):
+        raise HTTPException(status_code=resp.status_code, detail=resp.text)
+
+    result = resp.json()
+    code = result.get('code') if 'code' in result else result.get('reason')
+    if code not in (0, '0'):
+        raise HTTPException(status_code=400, detail=result.get('message', result.get('detail', 'Agora API error')))
+
+    fields = _record_from_data(result['data'])
+    record = AgentV2(**fields)
+    db.add(record)
+    await db.commit()
+    await db.refresh(record)
+    return _serialize(record)
+
+
 @router.post('/sync')
 async def sync_agents(db: AsyncSession = Depends(get_db)):
     """

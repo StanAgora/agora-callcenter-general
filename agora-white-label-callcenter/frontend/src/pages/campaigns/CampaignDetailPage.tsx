@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation, type TFunction } from 'react-i18next'
 import {
   ArrowLeft, Loader2, StopCircle, RefreshCw, Phone, MessageSquare, Database, Download, X,
-  PhoneCall, PhoneOutgoing, Voicemail, PhoneMissed, CircleAlert, Timer,
+  PhoneCall, PhoneOutgoing, Voicemail, PhoneMissed, CircleAlert, Timer, Copy,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { campaignAgentSourceLabel, campaignQuotaModeLabel } from '../../lib/campaignDisplayLabels'
@@ -52,10 +52,12 @@ interface CallV2ListItem {
   duration_seconds: number | null
   answered_ts: number | null
   call_ts: number | null
+  start_ts: number | null
   channel_name: string | null
   record_file_url: string | null
   has_transcript: boolean
   has_structured_output: boolean
+  call_success: boolean | null | undefined
 }
 
 interface CallV2Stats {
@@ -540,6 +542,13 @@ export function CampaignDetailPage() {
                 : t('agora.refresh_list')}
             </button>
             <button
+              onClick={() => navigate('/surveys/new', { state: { duplicateFrom: campaign } })}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200"
+            >
+              <Copy size={13} />
+              {t('agora.duplicate')}
+            </button>
+            <button
               onClick={handleInterrupt}
               disabled={isTerminal || interrupting}
               className={cn(
@@ -831,20 +840,22 @@ export function CampaignDetailPage() {
 
             {callsTotal > 0 && (
               <div className="overflow-x-auto">
-                <div className="min-w-[980px] divide-y divide-gray-100">
-                  <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400 font-medium grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2">
+                <div className="min-w-[1300px] divide-y divide-gray-100">
+                  <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400 font-medium grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_72px_92px] gap-2">
                   <span>{t('agora.th_status')}</span>
                   <span>{t('agora.th_to')}</span>
                   <span>{t('agora.th_type')}</span>
+                  <span>Call Start Time</span>
                   <span>{t('agora.th_hangup')}</span>
                   <span>{t('agora.th_duration')}</span>
                   <span>{t('agora.th_session')}</span>
+                  <span>樣本</span>
                   <span className="text-right pr-1">{t('agora.th_actions')}</span>
                 </div>
                 {pageItems.map(c => {
                   const st = categoryStyle(c.call_category)
                   return (
-                    <div key={c.call_id} className="px-4 py-2 hover:bg-gray-50 transition-colors grid grid-cols-[18px_160px_140px_1fr_70px_1fr_92px] gap-2 items-center">
+                    <div key={c.call_id} className="px-4 py-2 hover:bg-gray-50 transition-colors grid grid-cols-[18px_160px_140px_140px_220px_70px_260px_72px_92px] gap-2 items-center">
                       <div className="flex items-center justify-start">
                         <span className={cn('w-2.5 h-2.5 rounded-full', st.dot)} title={c.call_category ?? 'unknown'} />
                       </div>
@@ -853,6 +864,9 @@ export function CampaignDetailPage() {
                       </span>
                       <span className={cn('text-[11px] font-mono truncate', st.text)} title={c.call_category ?? ''}>
                         {c.call_category ?? '—'}
+                      </span>
+                      <span className="text-[11px] text-gray-600 font-mono truncate" title={c.start_ts ? new Date(c.start_ts).toLocaleString(bcp47ForI18n(i18n.language)) : ''}>
+                        {c.start_ts ? new Date(c.start_ts).toLocaleTimeString(bcp47ForI18n(i18n.language)) : '—'}
                       </span>
                       <span className="text-[11px] text-gray-600 font-mono truncate" title={c.hangup_reason ?? ''}>
                         {c.hangup_reason ?? '—'}
@@ -863,6 +877,17 @@ export function CampaignDetailPage() {
                       <span className="text-[11px] text-gray-600 font-mono truncate" title={c.agent_session_id ?? ''}>
                           {c.agent_session_id ?? '—'}
                       </span>
+                      <div className="flex items-center">
+                        {c.call_success == null ? null : c.call_success ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500 text-white whitespace-nowrap">
+                            樣本成功
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-400 text-white whitespace-nowrap">
+                            樣本失敗
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center justify-end gap-1">
                         <button
                           type="button"
@@ -914,20 +939,38 @@ export function CampaignDetailPage() {
                         >
                           <Database size={13} />
                         </button>
-                        <a
-                          href={c.record_file_url ?? undefined}
+                        <button
+                          type="button"
+                          disabled={!c.record_file_url}
+                          onClick={async () => {
+                            if (!c.record_file_url) return
+                            let url = c.record_file_url
+                            if (url.startsWith('s3://')) {
+                              try {
+                                const r = await fetch(`${API}/api/import/audio-presign`, {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ s3_uri: url }),
+                                })
+                                if (!r.ok) throw new Error()
+                                url = (await r.json()).url
+                              } catch {
+                                alert('無法取得錄音連結，請稍後再試')
+                                return
+                              }
+                            }
+                            window.open(url, '_blank', 'noreferrer')
+                          }}
                           className={cn(
                             'w-6 h-6 inline-flex items-center justify-center rounded-md border',
                             c.record_file_url
                               ? 'border-gray-200 text-gray-500 hover:bg-gray-100'
-                              : 'border-gray-100 text-gray-200 cursor-not-allowed pointer-events-none'
+                              : 'border-gray-100 text-gray-200 cursor-not-allowed'
                           )}
                           title={t('agora.tt_recording')}
-                          target="_blank"
-                          rel="noreferrer"
                         >
                           <Download size={13} />
-                        </a>
+                        </button>
                       </div>
                     </div>
                   )

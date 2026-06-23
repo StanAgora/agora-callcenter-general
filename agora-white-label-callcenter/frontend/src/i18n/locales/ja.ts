@@ -34,7 +34,7 @@ const ja = {
     campaigns: 'キャンペーン一覧',
     new_campaign: '新規作成',
     settings: '設定',
-    subtitle: 'AGORA CALL CENTER API DEMO, NOT FOR PRODUCTION USE.',
+    subtitle: '',
   },
   status: {
     draft: '下書き',
@@ -232,11 +232,14 @@ const ja = {
     saved: '設定を保存しました',
   },
   app_nav: {
-    campaigns: 'Outbound Campaigns',
+    dashboard: 'ダッシュボード',
+    campaigns: 'アウトバウンド',
     phone_numbers: '発信番号',
     agents: 'エージェント',
     call_history: '通話履歴',
+    inbound_routing: 'インバウンド設定',
     sample: 'サンプル',
+    import: 'インポート',
   },
   agora: {
     list_title: 'キャンペーン',
@@ -471,6 +474,18 @@ const ja = {
     total_target_2: '合計目標: {{n}} 枠',
     n_conds2: '{{n}} 条件',
     creating_campaign: '作成中...',
+  },
+  call_history: {
+    subtitle: '合計 {{n}} 件',
+    empty: '通話履歴はまだありません',
+    col_from: '発信番号',
+    col_to: '着信番号',
+    col_category: 'カテゴリ',
+    col_hangup: '切断理由',
+    col_duration: '通話時間',
+    col_time: '時刻',
+    col_campaign: 'キャンペーン ID',
+    page_info: '{{page}} / {{totalPages}} ページ · {{total}} 件',
   },
   login: {
     title: 'サインイン',

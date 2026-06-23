@@ -34,7 +34,7 @@ const ko = {
     campaigns: '캠페인 목록',
     new_campaign: '새 캠페인',
     settings: '설정',
-    subtitle: 'AGORA CALL CENTER API DEMO, NOT FOR PRODUCTION USE.',
+    subtitle: '',
   },
   status: {
     draft: '초안',
@@ -232,11 +232,14 @@ const ko = {
     saved: '저장되었습니다',
   },
   app_nav: {
-    campaigns: 'Outbound Campaigns',
+    dashboard: '대시보드',
+    campaigns: '아웃바운드 캠페인',
     phone_numbers: '발신 번호',
     agents: '에이전트',
     call_history: '통화 기록',
+    inbound_routing: '인바운드 설정',
     sample: '샘플',
+    import: '가져오기',
   },
   agora: {
     list_title: '캠페인',
@@ -471,6 +474,18 @@ const ko = {
     total_target_2: '총 목표: {{n}}건',
     n_conds2: '{{n}}개 조건',
     creating_campaign: '생성 중...',
+  },
+  call_history: {
+    subtitle: '총 {{n}}건',
+    empty: '통화 기록이 없습니다',
+    col_from: '발신 번호',
+    col_to: '수신 번호',
+    col_category: '분류',
+    col_hangup: '종료 사유',
+    col_duration: '통화 시간',
+    col_time: '시간',
+    col_campaign: '캠페인 ID',
+    page_info: '{{page}} / {{totalPages}} 페이지 · {{total}}건',
   },
   login: {
     title: '로그인',

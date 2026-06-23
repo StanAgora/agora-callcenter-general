@@ -21,6 +21,7 @@ import { AgentsPage } from './pages/agents/AgentsPage'
 import { CallHistoryPage } from './pages/call-history/CallHistoryPage'
 import { InboundRoutingPage } from './pages/inbound-routing/InboundRoutingPage'
 import { AnalyticsDashboard } from './pages/analytics/AnalyticsDashboard'
+import { ImportPage } from './pages/import/ImportPage'
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="surveys/:id/quotas" element={<QuotaEditorPage />} />
           <Route path="surveys/:id/dashboard" element={<DashboardPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="import" element={<ImportPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

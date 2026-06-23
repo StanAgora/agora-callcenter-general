@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Bot, Loader2 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import {
-  propsToForm,
-  formToProps,
-  PropsEditor,
-  type PropsForm,
+  extractSections,
+  sectionsToProps,
+  JsonPropsEditor,
+  type JsonSections,
+  type JsonSectionErrors,
   type Agent,
 } from '../agents/AgentsPage'
 
@@ -22,7 +23,8 @@ export function CampaignAgentPromptPage() {
   const [campaignName, setCampaignName] = useState('')
   const [agent, setAgent] = useState<Agent | null>(null)
   const [original, setOriginal] = useState<Record<string, unknown>>({})
-  const [form, setForm] = useState<PropsForm | null>(null)
+  const [sections, setSections] = useState<JsonSections | null>(null)
+  const [sectionErrors, setSectionErrors] = useState<JsonSectionErrors>({})
   const [updating, setUpdating] = useState(false)
   const [saveError, setSaveError] = useState('')
 
@@ -52,7 +54,7 @@ export function CampaignAgentPromptPage() {
       setAgent(a)
       const orig = (a.properties ?? {}) as Record<string, unknown>
       setOriginal(JSON.parse(JSON.stringify(orig)) as Record<string, unknown>)
-      setForm(propsToForm(orig))
+      setSections(extractSections(orig))
     } catch {
       setError(t('campaign_agent_prompt.err_network'))
     } finally {
@@ -63,11 +65,26 @@ export function CampaignAgentPromptPage() {
   useEffect(() => { load().catch(() => {}) }, [load])
 
   async function handleUpdate() {
-    if (!agent || !form) return
+    if (!agent || !sections) return
     setSaveError('')
+
+    // Validate all sections
+    const errors: JsonSectionErrors = {}
+    let hasErrors = false
+    for (const key of Object.keys(sections) as (keyof JsonSections)[]) {
+      try { JSON.parse(sections[key]) } catch {
+        errors[key] = 'Invalid JSON'
+        hasErrors = true
+      }
+    }
+    if (hasErrors) {
+      setSectionErrors(errors)
+      return
+    }
+
     setUpdating(true)
     try {
-      const rebuilt = formToProps(form, original)
+      const rebuilt = sectionsToProps(sections, original)
       const resp = await fetch(`${API}/api/agents/${agent.agent_id}/properties`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -99,7 +116,7 @@ export function CampaignAgentPromptPage() {
     )
   }
 
-  if (error || !agent || !form) {
+  if (error || !agent || !sections) {
     return (
       <div className="p-8">
         <Link
@@ -153,9 +170,6 @@ export function CampaignAgentPromptPage() {
       </div>
 
       <div className="mb-3 flex-shrink-0 rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-        <span className="mr-1 inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
-          {t('common.sensitive')}
-        </span>
         {t('campaign_agent_prompt.sensitive_hint')}
       </div>
 
@@ -166,7 +180,16 @@ export function CampaignAgentPromptPage() {
       )}
 
       <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-        <PropsEditor form={form} onChange={patch => setForm(prev => (prev ? { ...prev, ...patch } : null))} />
+        <JsonPropsEditor
+          sections={sections}
+          errors={sectionErrors}
+          onChange={(key, value) => {
+            let sectionError: string | undefined
+            try { JSON.parse(value) } catch { sectionError = 'Invalid JSON' }
+            setSections(prev => prev ? { ...prev, [key]: value } : null)
+            setSectionErrors(prev => ({ ...prev, [key]: sectionError }))
+          }}
+        />
       </div>
     </div>
   )

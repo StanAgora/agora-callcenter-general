@@ -78,6 +78,7 @@ def _serialize(c: CampaignV2) -> dict:
         'status': c.status,
         'created_at': c.created_at,
         'updated_at': c.updated_at,
+        'is_imported': bool(c.is_imported),
     }
 
 async def _calls_count_by_campaign_ids(db: AsyncSession, campaign_ids: list[str]) -> dict[str, int]:
