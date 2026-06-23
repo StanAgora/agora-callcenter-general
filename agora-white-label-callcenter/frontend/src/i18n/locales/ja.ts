@@ -319,6 +319,7 @@ const ja = {
     stat_no_answer: '無応答',
     stat_failed: '失敗',
     stat_total_duration: '総通話時間',
+    duplicate: '複製',
   },
   agents: {
     page_subtitle: '会話 AI エージェントの管理',

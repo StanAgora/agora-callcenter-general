@@ -267,6 +267,11 @@ async def merge_upstream_call_details(db: AsyncSession, call_ids: list[str]) -> 
     return n
 
 
+def _to_seconds(ts: int) -> int:
+    """Normalize a Unix timestamp to seconds — Agora API uses seconds for from_time."""
+    return ts // 1000 if ts > 9_999_999_999 else ts
+
+
 async def _fetch_incremental_calls(campaign_id: str, from_time: int | None) -> list[dict]:
     items: list[dict] = []
     cursor = ''
@@ -278,7 +283,7 @@ async def _fetch_incremental_calls(campaign_id: str, from_time: int | None) -> l
                 'limit': 50,
             }
             if from_time is not None:
-                params['from_time'] = from_time
+                params['from_time'] = _to_seconds(from_time)
             if cursor:
                 params['cursor'] = cursor
             resp = await client.get(CALLS_BASE_URL, params=params, headers=_headers())
@@ -485,18 +490,21 @@ async def sync_calls_v2_upstream(db: AsyncSession, campaign_id: str) -> dict:
 
     upstream = await _fetch_incremental_calls(campaign_id, last_from_time)
 
+    # Watermark uses end_ts (converted to seconds) — API filters completed calls by end_ts.
     max_end_ts: int | None = None
     for c in upstream:
         ts = c.get('end_ts')
         if isinstance(ts, int) and ts > 0:
-            max_end_ts = ts if max_end_ts is None else max(max_end_ts, ts)
-            continue
-        # Fallback watermark if upstream omits end_ts (should be rare).
-        for k in ('answered_ts', 'start_ts', 'call_ts'):
-            t2 = c.get(k)
-            if isinstance(t2, int) and t2 > 0:
-                max_end_ts = t2 if max_end_ts is None else max(max_end_ts, t2)
-                break
+            ts_s = _to_seconds(ts)
+            max_end_ts = ts_s if max_end_ts is None else max(max_end_ts, ts_s)
+        else:
+            # Fallback when end_ts is absent.
+            for k in ('answered_ts', 'start_ts', 'call_ts'):
+                t2 = c.get(k)
+                if isinstance(t2, int) and t2 > 0:
+                    t2_s = _to_seconds(t2)
+                    max_end_ts = t2_s if max_end_ts is None else max(max_end_ts, t2_s)
+                    break
 
     call_ids = [c.get('call_id') for c in upstream if c.get('call_id')]
     existing: dict[str, CallV2] = {}
@@ -565,12 +573,13 @@ async def sync_calls_v2_upstream(db: AsyncSession, campaign_id: str) -> dict:
         await merge_upstream_call_details(db, list(need_detail))
 
     if max_end_ts is not None:
+        watermark = max_end_ts  # already in seconds
         if state is None:
-            state = CallV2SyncState(campaign_id=campaign_id, last_call_ts=int(max_end_ts))
+            state = CallV2SyncState(campaign_id=campaign_id, last_call_ts=watermark)
             db.add(state)
         else:
-            prev = int(state.last_call_ts) if state.last_call_ts is not None else 0
-            state.last_call_ts = max(prev, int(max_end_ts))
+            prev = _to_seconds(int(state.last_call_ts)) if state.last_call_ts is not None else 0
+            state.last_call_ts = max(prev, watermark)
         await db.commit()
 
     changed_ids = list(dict.fromkeys([*new_ids, *updated_ids]))

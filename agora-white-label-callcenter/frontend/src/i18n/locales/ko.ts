@@ -319,6 +319,7 @@ const ko = {
     stat_no_answer: '부재',
     stat_failed: '실패',
     stat_total_duration: '총 통화 시간',
+    duplicate: '복제',
   },
   agents: {
     page_subtitle: '대화형 AI 에이전트 관리',

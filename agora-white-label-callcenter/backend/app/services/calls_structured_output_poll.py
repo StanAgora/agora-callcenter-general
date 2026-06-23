@@ -24,10 +24,18 @@ async def poll_pending_structured_outputs_forever() -> None:
         while True:
             try:
                 async with async_session_factory() as db:
+                    from sqlalchemy import or_
                     st = func.lower(func.coalesce(CallV2.structured_output_status, ''))
                     q = (
                         select(CallV2.call_id)
-                        .where(~st.in_(('completed', 'failed', 'disabled')))
+                        .where(
+                            or_(
+                                ~st.in_(('completed', 'failed', 'disabled')),
+                                # transcript is always set (at minimum '[]') after a successful
+                                # detail fetch, so NULL means detail was never fetched yet.
+                                CallV2.transcript.is_(None),
+                            )
+                        )
                         .order_by(CallV2.id.asc())
                         .limit(batch)
                     )
