@@ -26,6 +26,7 @@ RUN printf 'server {\n\
     listen 8080;\n\
     root /usr/share/nginx/html;\n\
     index index.html;\n\
+    client_max_body_size 50M;\n\
 \n\
     location /api/ {\n\
         proxy_pass http://127.0.0.1:8000/api/;\n\

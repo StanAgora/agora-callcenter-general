@@ -87,8 +87,12 @@ export function ImportPage() {
       fd.append('file', csvFile)
       const resp = await fetch(`${API}/api/import/campaign-csv`, { method: 'POST', body: fd })
       if (!resp.ok) {
-        const err = await resp.json()
-        throw new Error(err.detail ?? 'Import failed')
+        const contentType = resp.headers.get('content-type') ?? ''
+        if (contentType.includes('application/json')) {
+          const err = await resp.json()
+          throw new Error(err.detail ?? `Import failed (${resp.status})`)
+        }
+        throw new Error(resp.status === 413 ? 'File too large — please split the CSV into smaller chunks' : `Import failed (${resp.status})`)
       }
       const result: ImportResult = await resp.json()
       setImportResult(result)
