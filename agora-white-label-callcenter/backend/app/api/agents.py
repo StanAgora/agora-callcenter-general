@@ -55,7 +55,7 @@ def _build_payload(body: CreateAgentRequest) -> dict:
             },
             'llm': {
                 'url': 'https://api.openai.com/v1/chat/completions',
-                'api_key': 'REDACTED_OPENAI_KEY',
+                'api_key': settings.openai_api_key,
                 'system_messages': [{'role': 'system', 'content': body.system_content}],
                 'max_history': 32,
                 'greeting_message': body.greeting_message,
@@ -65,7 +65,7 @@ def _build_payload(body: CreateAgentRequest) -> dict:
             'tts': {
                 'vendor': 'minimax',
                 'params': {
-                    'key': 'REDACTED_MINIMAX_KEY',
+                    'key': settings.minimax_api_key,
                     'url': 'wss://api-uw.minimax.io/ws/v1/t2a_v2',
                     'model': 'speech-02-turbo',
                     'group_id': '1967483817044222128',

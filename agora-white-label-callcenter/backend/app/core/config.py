@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     poll_interval_seconds: int = 5
     max_concurrent_calls: int = 10
     openai_api_key: str = ''
+    minimax_api_key: str = ''
     quota_transcript_model: str = 'gpt-4o-mini'
     quota_transcript_min_confidence: float = 0.5
     structured_output_poll_interval_seconds: int = 20
