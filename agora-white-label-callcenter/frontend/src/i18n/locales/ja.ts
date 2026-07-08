@@ -328,7 +328,7 @@ const ja = {
     create_error_required: 'エージェント名・System Prompt・Greeting は必須です',
     delete_confirm: 'このエージェントを削除しますか？',
     server_error: 'サーバーに接続できません。バックエンドを確認してください。',
-    props_sensitive_hint: 'マスク済みです。**** のままにすると保存値は変わりません',
+    props_sensitive_hint: 'キーなどの項目は先頭4文字のみ表示し、残りは*でマスクされます。マスク値のままにすると保存値は変わりません',
     asr_desc: '音声エンジンと言語',
     params_desc: 'タイムアウト、データチャネル、診断スイッチ',
     turn_desc: '発話の始端/終端（VAD と意味的ターン）',

@@ -328,7 +328,7 @@ const zh = {
     create_error_required: 'Agent Name、System Prompt 和 Greeting Message 為必填項',
     delete_confirm: '確定刪除該 Agent 嗎？',
     server_error: '無法連線至伺服器，請檢查後端是否正常運行',
-    props_sensitive_hint: '欄位已脫敏，保持 **** 不變則不會修改原始值',
+    props_sensitive_hint: '含金鑰的欄位僅顯示前 4 碼，其餘以 * 遮蔽；若保持該遮蔽值不變則不會修改原始值',
     asr_desc: '語音識別引擎與語言',
     params_desc: '逾時、資料通道與診斷開關',
     turn_desc: '起止話偵測（VAD 與語義停頓）',

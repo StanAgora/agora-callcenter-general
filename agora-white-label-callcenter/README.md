@@ -178,19 +178,6 @@ VA 回调        → POST /api/callbacks/call-result → 更新 QuotaCell.comple
 
 ## 通话结果编码
 
-| 代码 | 含义 |
-|------|------|
-| 0 | 조사성공（调查成功） |
-| 1 | 결번（空号） |
-| 2 | 기업체/FAX |
-| 3 | 강력거절（强烈拒绝） |
-| 4 | 거절（拒绝） |
-| 5 | 비수신（无人接听） |
-| 6 | 통화중（占线） |
-| 7 | 대상아님（不符条件） |
-| 8 | 쿼터오버（配额满） |
-| 9 | 중도포기（中途放弃） |
-| 10 | 기타（其他） |
 
 ---
 
@@ -207,15 +194,6 @@ cd frontend && npx tsc --noEmit
 cd frontend && npm run build
 ```
 
----
-
-## 待办 / 已知问题
-
-- [ ] **DashboardPage** 目前使用 Mock 数据，待对接真实后端 API + WebSocket
-- [ ] **SettingsPage** 保存功能待对接后端配置接口
-- [ ] **Voice Agent** 真实接口规范待确定（当前为 httpx stub）
-- [ ] URL (OQD) 类型上传流程待完善（后端需补充 survey_url 参数处理）
-- [ ] 生产环境数据库切换 PostgreSQL + Alembic 迁移
 
 ---
 

@@ -329,7 +329,7 @@ const en = {
     delete_confirm: 'Delete this agent?',
     server_error: 'Cannot connect to the server. Check that the backend is running.',
     props_sensitive_hint:
-      'Fields are masked. Leave **** as-is to keep the stored value unchanged.',
+      'Secret fields show only the first 4 characters, the rest masked with *. Leave the masked value as-is to keep the stored value unchanged.',
     asr_desc: 'Speech engine and language',
     params_desc: 'Timeouts, data channel, and diagnostic toggles',
     turn_desc: 'Start/end of speech (VAD and semantic turn-taking)',

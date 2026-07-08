@@ -328,7 +328,7 @@ const ko = {
     create_error_required: '이름, System Prompt, Greeting은 필수입니다',
     delete_confirm: '이 에이전트를 삭제할까요?',
     server_error: '서버에 연결할 수 없습니다. 백엔드를 확인하세요.',
-    props_sensitive_hint: '필드는 마스킹됨. **** 유지 시 저장된 값이 바뀌지 않습니다',
+    props_sensitive_hint: '키 등의 필드는 앞 4자리만 표시되고 나머지는 *로 마스킹됩니다. 마스킹된 값을 그대로 두면 저장된 값이 바뀌지 않습니다',
     asr_desc: '음성 엔진과 언어',
     params_desc: '타임아웃, 데이터 채널, 진단 스위치',
     turn_desc: '발화 시작/끝 (VAD·의미 기반 턴)',

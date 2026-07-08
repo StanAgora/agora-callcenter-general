@@ -126,6 +126,7 @@ def _build_payload(body: CreateAgentRequest) -> dict:
 
 
 def _serialize(a: AgentV2) -> dict:
+    props = json.loads(a.properties) if a.properties else None
     return {
         'id': a.id,
         'agent_id': a.agent_id,
@@ -135,7 +136,7 @@ def _serialize(a: AgentV2) -> dict:
         'greeting_message': a.greeting_message,
         'failure_message': a.failure_message,
         'voice_id': a.voice_id,
-        'properties': json.loads(a.properties) if a.properties else None,
+        'properties': _mask_properties(props) if props else props,
         'created_at': a.created_at,
         'updated_at': a.updated_at,
     }
@@ -355,15 +356,40 @@ async def sync_agents(db: AsyncSession = Depends(get_db)):
     return [_serialize(r) for r in result.scalars().all()]
 
 
-SENSITIVE_PLACEHOLDER = '****'
+SENSITIVE_PLACEHOLDER = '****'  # 兼容旧前端可能提交的占位符
 SENSITIVE_PATHS = [
     ('llm', 'api_key'),
     ('tts', 'params', 'key'),
 ]
 
 
+def _mask_secret(value: str) -> str:
+    """只保留前 4 位，其余替换为 *，用于返回给前端展示。"""
+    if not isinstance(value, str) or not value:
+        return value
+    return value[:4] + '*' * max(len(value) - 4, 4)
+
+
+def _mask_properties(props: dict) -> dict:
+    """对 properties 中的敏感字段做脱敏处理，供 API 响应使用。"""
+    import copy
+    result = copy.deepcopy(props)
+    for path in SENSITIVE_PATHS:
+        node = result
+        for key in path[:-1]:
+            node = node.get(key) if isinstance(node, dict) else None
+            if node is None:
+                break
+        if isinstance(node, dict):
+            last = path[-1]
+            value = node.get(last)
+            if isinstance(value, str) and value:
+                node[last] = _mask_secret(value)
+    return result
+
+
 def _restore_sensitive(new_props: dict, original_props: dict) -> dict:
-    """把用户未修改的敏感字段（值仍为 ****）从原始 properties 还原。"""
+    """把用户未修改的敏感字段（前端提交的仍是脱敏后的值）从原始 properties 还原。"""
     import copy
     result = copy.deepcopy(new_props)
     for path in SENSITIVE_PATHS:
@@ -373,9 +399,14 @@ def _restore_sensitive(new_props: dict, original_props: dict) -> dict:
             node_new = node_new.get(key, {}) if isinstance(node_new, dict) else {}
             node_orig = node_orig.get(key, {}) if isinstance(node_orig, dict) else {}
         last = path[-1]
-        if isinstance(node_new, dict) and node_new.get(last) == SENSITIVE_PLACEHOLDER:
-            if isinstance(node_orig, dict) and last in node_orig:
-                node_new[last] = node_orig[last]
+        if not (isinstance(node_new, dict) and isinstance(node_orig, dict) and last in node_orig):
+            continue
+        orig_val = node_orig[last]
+        new_val = node_new.get(last)
+        if new_val == SENSITIVE_PLACEHOLDER or (
+            isinstance(orig_val, str) and orig_val and new_val == _mask_secret(orig_val)
+        ):
+            node_new[last] = orig_val
     return result
 
 

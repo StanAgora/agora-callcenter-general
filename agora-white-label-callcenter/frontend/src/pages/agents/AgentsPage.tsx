@@ -669,7 +669,7 @@ export function AgentsPage() {
         <Modal title={`Edit Properties — ${propsModal.agent.agent_name}`} onClose={() => setPropsModal(null)} wide>
           <div className="px-6 pt-3 pb-3 border-b border-gray-100 flex-shrink-0 flex items-center justify-between gap-3">
             <p className="text-xs text-gray-400">
-              Edit each section as JSON. API keys are stored as-is.
+              {t('agents.props_sensitive_hint')}
             </p>
             <button
               onClick={handleUpdate}
