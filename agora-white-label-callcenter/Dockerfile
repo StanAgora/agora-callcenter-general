@@ -4,8 +4,8 @@ WORKDIR /build/frontend
 COPY frontend/package*.json ./
 RUN npm ci --legacy-peer-deps
 COPY frontend/ .
-ARG TAIWANPULSE_VITE_BASE_PATH=/
-RUN npx vite build --base="${TAIWANPULSE_VITE_BASE_PATH}"
+ARG APP_VITE_BASE_PATH=/
+RUN npx vite build --base="${APP_VITE_BASE_PATH}"
 
 # ── Stage 2: Runtime (Python + nginx) ────────────────────────────────────────
 FROM python:3.11-slim

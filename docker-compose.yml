@@ -1,15 +1,15 @@
 # 與 quick-deploy.sh 配套：不向宿主機發布任何端口（僅 whip-network 內可達 :8080 / :5432）。
-# 前置網關須與 taiwanpulse-app 同網。
+# 前置網關須與 agora-callcenter-app 同網。
 services:
-  taiwanpulse-postgres:
+  agora-callcenter-postgres:
     image: postgres:16-alpine
-    container_name: taiwanpulse-postgres
+    container_name: agora-callcenter-postgres
     environment:
       POSTGRES_USER: campaign
       POSTGRES_PASSWORD: campaign123
       POSTGRES_DB: campaign_db
     volumes:
-      - taiwanpulse-pgdata:/var/lib/postgresql/data
+      - agora-callcenter-pgdata:/var/lib/postgresql/data
     networks:
       - whip-network
     healthcheck:
@@ -18,25 +18,25 @@ services:
       timeout: 5s
       retries: 10
 
-  taiwanpulse-app:
-    container_name: taiwanpulse-app
+  agora-callcenter-app:
+    container_name: agora-callcenter-app
     build:
       context: ./agora-white-label-callcenter
       dockerfile: Dockerfile
       args:
-        TAIWANPULSE_VITE_BASE_PATH: ${TAIWANPULSE_VITE_BASE_PATH:-/}
+        APP_VITE_BASE_PATH: ${APP_VITE_BASE_PATH:-/}
     env_file:
       - ./.env
     environment:
-      DATABASE_URL: postgresql+asyncpg://campaign:campaign123@taiwanpulse-postgres:5432/campaign_db
+      DATABASE_URL: postgresql+asyncpg://campaign:campaign123@agora-callcenter-postgres:5432/campaign_db
     networks:
       - whip-network
     depends_on:
-      taiwanpulse-postgres:
+      agora-callcenter-postgres:
         condition: service_healthy
 
 volumes:
-  taiwanpulse-pgdata:
+  agora-callcenter-pgdata:
 
 networks:
   whip-network:
