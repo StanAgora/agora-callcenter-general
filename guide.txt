@@ -14,9 +14,3 @@ npm run dev
 
 cd agoracompaignmanager/backend
 python seed.py
-
-
-
-Shengwang QA account
-15213366726   
-Lht123456@

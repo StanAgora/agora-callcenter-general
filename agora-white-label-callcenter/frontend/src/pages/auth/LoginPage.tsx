@@ -4,8 +4,8 @@ import { Loader2, Eye, EyeOff, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { login } from '../../lib/auth'
 import { LANGUAGES, setLang, type Lang } from '../../i18n'
-import agoraLogo from '../../assets/Logo-frontPage.png'
-import taipeiBg from '../../assets/101.webp'
+import agoraLogo from '../../assets/agoralogo-small.png'
+import taipeiBg from '../../assets/liberty.jpg'
 import twFlag from '../../assets/tw-flag.png'
 
 export function LoginPage() {
@@ -42,7 +42,7 @@ export function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <img src={agoraLogo} alt="Agora" className="h-40 w-auto object-contain mb-3" />
+          <img src={agoraLogo} alt="Agora" className="h-12 w-auto object-contain mb-3" />
         </div>
 
         {/* Language selector */}
