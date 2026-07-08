@@ -14,7 +14,7 @@ from app.models.agent_v2 import AgentV2
 
 router = APIRouter(prefix='/api/live-test', tags=['live-test'])
 
-TOKEN_SERVER_URL = 'https://token.stantest.top:8083/fetch_agora_token2'
+TOKEN_SERVER_URL = 'https://token.stantest.top:8084/fetch_agora_token3'
 
 
 async def _fetch_token(uid: str, channel: str) -> str:

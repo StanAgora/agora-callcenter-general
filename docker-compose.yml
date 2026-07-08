@@ -24,7 +24,7 @@ services:
       context: ./agora-white-label-callcenter
       dockerfile: Dockerfile
       args:
-        APP_VITE_BASE_PATH: ${APP_VITE_BASE_PATH:-/}
+        APP_VITE_BASE_PATH: ${APP_VITE_BASE_PATH:-/callcenter/}
     env_file:
       - ./.env
     environment:

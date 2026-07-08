@@ -18,7 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 COMPOSE_FILE="${SCRIPT_DIR}/docker-compose.yml"
 ENV_FILE="${SCRIPT_DIR}/.env"
-DEFAULT_PREFIX="/"
+DEFAULT_PREFIX="/callcenter/"
 APP_PREFIX="${APP_PREFIX:-$DEFAULT_PREFIX}"
 
 if [[ ! -f "$COMPOSE_FILE" ]]; then
