@@ -49,43 +49,41 @@ export function Layout() {
   ]
 
   return (
-    <div className="flex h-screen bg-[#EEF3FA] relative overflow-hidden">
-      {/* Ambient glow bubbles */}
-      <div className="pointer-events-none absolute -top-40 -left-40 w-[560px] h-[560px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(79,172,254,0.20) 0%, rgba(0,242,254,0) 70%)', filter: 'blur(60px)' }} />
-      <div className="pointer-events-none absolute bottom-0 right-1/3 w-[640px] h-[640px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.14) 0%, rgba(99,102,241,0) 70%)', filter: 'blur(80px)' }} />
-      <div className="pointer-events-none absolute top-1/2 -right-20 w-[420px] h-[420px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,242,254,0.12) 0%, rgba(0,242,254,0) 70%)', filter: 'blur(70px)' }} />
-
+    <div className="flex h-screen bg-[#F6F7F9]">
       {/* Sidebar */}
-      <aside className="w-56 glass-sidebar flex flex-col flex-shrink-0 relative z-10">
+      <aside className="w-60 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
         {/* Logo */}
         <div
-          className="px-3 py-3 border-b border-white/40 cursor-default select-none"
+          className="h-16 px-5 flex items-center justify-center border-b border-gray-100 cursor-default select-none flex-shrink-0"
           onClick={handleLogoClick}
         >
-          <img src={agoraLogo} alt="Agora" className="w-full h-auto object-contain" />
+          <img src={agoraLogo} alt="Agora" className="h-[42px] w-auto object-contain" />
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {NAV.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
+                  'relative flex items-center gap-3 h-10 px-3 rounded-md text-[13px] font-medium transition-colors',
                   isActive
-                    ? 'bg-indigo-500/10 text-indigo-700 font-medium'
-                    : 'text-slate-500 hover:bg-white/50 hover:text-slate-900'
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 )
               }
             >
               {({ isActive }) => (
                 <>
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-blue-600" />
+                  )}
                   <Icon
-                    size={16}
+                    size={17}
                     strokeWidth={isActive ? 2.25 : 1.75}
-                    className={isActive ? 'text-indigo-600' : 'text-gray-400'}
+                    className={isActive ? 'text-blue-600' : 'text-gray-400'}
                   />
                   {label}
                 </>
@@ -95,31 +93,31 @@ export function Layout() {
         </nav>
 
         {/* Language switcher */}
-        <div className="px-3 py-3 border-t border-white/40">
+        <div className="px-3 py-3 border-t border-gray-100">
           {langOpen && (
             <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
           )}
           <div className="relative z-50">
             <button
               onClick={() => setLangOpen(o => !o)}
-              className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-lg text-xs text-slate-600 bg-white/50 hover:bg-white/80 border border-white/60 transition-colors cursor-pointer"
+              className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md text-xs text-gray-600 bg-white hover:bg-gray-50 border border-gray-200 transition-colors cursor-pointer"
             >
               {currentLang.code === 'zh'
                 ? <img src={twFlag} alt="TW" className="w-4 h-auto" />
                 : <span className="text-sm leading-none">{currentLang.flag}</span>
               }
               <span className="flex-1 text-left">{currentLang.label}</span>
-              <ChevronDown size={12} className="text-slate-400" />
+              <ChevronDown size={12} className="text-gray-400" />
             </button>
             {langOpen && (
-              <div className="absolute bottom-full mb-1 left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute bottom-full mb-1 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
                 {LANGUAGES.map(({ code, flag, label }) => (
                   <button
                     key={code}
                     onClick={() => { setLang(code as Lang); setLangOpen(false) }}
                     className={[
                       'flex items-center gap-2 w-full px-2.5 py-1.5 text-xs hover:bg-gray-50',
-                      i18n.language === code ? 'text-indigo-600 font-medium bg-indigo-50' : 'text-slate-600',
+                      i18n.language === code ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-600',
                     ].join(' ')}
                   >
                     {code === 'zh'
@@ -135,22 +133,22 @@ export function Layout() {
         </div>
 
         {/* User profile */}
-        <div className="px-3 py-3 border-t border-white/40">
-          <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl bg-white/40">
-            <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-              <UserCircle2 size={15} className="text-indigo-500" />
+        <div className="px-3 py-3 border-t border-gray-100">
+          <div className="flex items-center gap-2.5 px-2 py-2 rounded-md hover:bg-gray-50 transition-colors">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <UserCircle2 size={15} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-700 truncate">Admin</p>
-              <p className="text-[10px] text-gray-400 truncate">Admin</p>
+              <p className="text-xs font-medium text-gray-800 truncate">Admin</p>
+              <p className="text-[10px] text-gray-400 truncate">Administrator</p>
             </div>
             <NavLink
               to="/settings"
               title={t('nav.settings')}
               className={({ isActive }) =>
                 cn(
-                  'p-1 rounded-lg transition-colors',
-                  isActive ? 'text-indigo-600 bg-indigo-500/10' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                  'p-1 rounded-md transition-colors',
+                  isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                 )
               }
             >
@@ -159,7 +157,7 @@ export function Layout() {
             <button
               onClick={handleLogout}
               title={t('login.logout')}
-              className="p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+              className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
             >
               <LogOut size={14} />
             </button>
@@ -168,7 +166,7 @@ export function Layout() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-auto relative z-10">
+      <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
     </div>
