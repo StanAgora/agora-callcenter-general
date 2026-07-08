@@ -1,5 +1,6 @@
 import asyncio
 import json
+import re
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
@@ -357,10 +358,11 @@ async def sync_agents(db: AsyncSession = Depends(get_db)):
 
 
 SENSITIVE_PLACEHOLDER = '****'  # 兼容旧前端可能提交的占位符
-SENSITIVE_PATHS = [
-    ('llm', 'api_key'),
-    ('tts', 'params', 'key'),
-]
+SENSITIVE_NAME_RE = re.compile(r'key|token|secret|password|credential', re.IGNORECASE)
+
+
+def _is_sensitive_field(name: str) -> bool:
+    return bool(SENSITIVE_NAME_RE.search(name))
 
 
 def _mask_secret(value: str) -> str:
@@ -371,43 +373,49 @@ def _mask_secret(value: str) -> str:
 
 
 def _mask_properties(props: dict) -> dict:
-    """对 properties 中的敏感字段做脱敏处理，供 API 响应使用。"""
-    import copy
-    result = copy.deepcopy(props)
-    for path in SENSITIVE_PATHS:
-        node = result
-        for key in path[:-1]:
-            node = node.get(key) if isinstance(node, dict) else None
-            if node is None:
-                break
+    """递归遍历 properties，对所有字段名包含 key/token/secret/password/credential
+    的字符串值做脱敏，不依赖固定路径（不同 TTS/LLM 供应商放置敏感字段的位置不同，
+    例如 llm.api_key、tts.params.key、tts.headers.X-Api-Key 等）。"""
+    def walk(node):
         if isinstance(node, dict):
-            last = path[-1]
-            value = node.get(last)
-            if isinstance(value, str) and value:
-                node[last] = _mask_secret(value)
-    return result
+            return {
+                k: _mask_secret(v) if isinstance(v, str) and v and _is_sensitive_field(k) else walk(v)
+                for k, v in node.items()
+            }
+        if isinstance(node, list):
+            return [walk(v) for v in node]
+        return node
+
+    return walk(props)
 
 
 def _restore_sensitive(new_props: dict, original_props: dict) -> dict:
     """把用户未修改的敏感字段（前端提交的仍是脱敏后的值）从原始 properties 还原。"""
-    import copy
-    result = copy.deepcopy(new_props)
-    for path in SENSITIVE_PATHS:
-        node_new = result
-        node_orig = original_props
-        for key in path[:-1]:
-            node_new = node_new.get(key, {}) if isinstance(node_new, dict) else {}
-            node_orig = node_orig.get(key, {}) if isinstance(node_orig, dict) else {}
-        last = path[-1]
-        if not (isinstance(node_new, dict) and isinstance(node_orig, dict) and last in node_orig):
-            continue
-        orig_val = node_orig[last]
-        new_val = node_new.get(last)
-        if new_val == SENSITIVE_PLACEHOLDER or (
-            isinstance(orig_val, str) and orig_val and new_val == _mask_secret(orig_val)
-        ):
-            node_new[last] = orig_val
-    return result
+    def walk(new_node, orig_node):
+        if isinstance(new_node, dict) and isinstance(orig_node, dict):
+            result = {}
+            for k, v in new_node.items():
+                orig_v = orig_node.get(k)
+                if (
+                    isinstance(v, str) and _is_sensitive_field(k)
+                    and isinstance(orig_v, str) and orig_v
+                    and (v == SENSITIVE_PLACEHOLDER or v == _mask_secret(orig_v))
+                ):
+                    result[k] = orig_v
+                elif isinstance(v, (dict, list)):
+                    result[k] = walk(v, orig_v)
+                else:
+                    result[k] = v
+            return result
+        if isinstance(new_node, list):
+            orig_list = orig_node if isinstance(orig_node, list) else []
+            return [
+                walk(v, orig_list[i] if i < len(orig_list) else None)
+                for i, v in enumerate(new_node)
+            ]
+        return new_node
+
+    return walk(new_props, original_props)
 
 
 @router.put('/{agent_id}/properties')

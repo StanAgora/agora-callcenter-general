@@ -14,7 +14,7 @@ export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'ko', label: '한국어', flag: '🇰🇷' },
 ]
 
-const saved = (localStorage.getItem('lang') as Lang) || 'ko'
+const saved = (localStorage.getItem('lang') as Lang) || 'en'
 
 i18n
   .use(initReactI18next)
@@ -26,7 +26,7 @@ i18n
       ja: { translation: ja },
     },
     lng: saved,
-    fallbackLng: 'ko',
+    fallbackLng: 'en',
     interpolation: { escapeValue: false },
   })
 
