@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Loader2, PlusCircle, Trash2, PhoneCall, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { bcp47ForI18n } from '../../i18n'
+import { PasswordConfirmModal } from '../../components/PasswordConfirmModal'
 
 const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
@@ -42,6 +43,7 @@ export function PhoneNumbersPage() {
   const [formError, setFormError] = useState('')
 
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
   async function loadNumbers() {
     try {
@@ -103,8 +105,11 @@ export function PhoneNumbersPage() {
     }
   }
 
-  async function handleDelete(numberId: string) {
-    if (!confirm(t('phone_numbers.delete_confirm'))) return
+  function handleDelete(numberId: string) {
+    setPendingDeleteId(numberId)
+  }
+
+  async function performDelete(numberId: string) {
     setDeletingId(numberId)
     try {
       const resp = await fetch(`${API}/api/phone-numbers/${numberId}`, { method: 'DELETE' })
@@ -348,6 +353,19 @@ export function PhoneNumbersPage() {
           </div>
         </div>
       )}
+
+      <PasswordConfirmModal
+        open={pendingDeleteId !== null}
+        title="Confirm Delete Number"
+        description="Deleting this number is a high-risk action and may disrupt call routing. Enter the confirmation password to continue."
+        confirmLabel="Delete"
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={() => {
+          const id = pendingDeleteId
+          setPendingDeleteId(null)
+          if (id) performDelete(id)
+        }}
+      />
     </div>
   )
 }

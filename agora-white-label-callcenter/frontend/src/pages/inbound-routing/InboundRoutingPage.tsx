@@ -3,6 +3,7 @@ import {
   Loader2, PhoneIncoming, Link2, Link2Off, Plus, Trash2, X, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { PasswordConfirmModal } from '../../components/PasswordConfirmModal'
 
 const API = (import.meta.env.VITE_API_URL ?? import.meta.env.BASE_URL).replace(/\/$/, '')
 
@@ -184,6 +185,11 @@ export function InboundRoutingPage() {
 
   const [unbindingId, setUnbindingId] = useState<string | null>(null)
 
+  // High-risk actions (edit binding / unbind) require a confirmation password
+  const [pendingAction, setPendingAction] = useState<
+    { type: 'unbind'; numberId: string } | { type: 'submit' } | null
+  >(null)
+
   const toggleSection = (key: keyof typeof openSections) =>
     setOpenSections(s => ({ ...s, [key]: !s[key] }))
 
@@ -213,11 +219,21 @@ export function InboundRoutingPage() {
     setOpenSections({ basic: true, endCall: true, structured: true, transfer: false })
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!modalEntry) return
     if (!form.agent_id) { setFormError('Please select an agent.'); return }
     setFormError('')
+    // Editing an existing binding is a high-risk action and requires confirmation.
+    if (modalEntry.binding) {
+      setPendingAction({ type: 'submit' })
+      return
+    }
+    doSubmit()
+  }
+
+  async function doSubmit() {
+    if (!modalEntry) return
     setSubmitting(true)
     try {
       const resp = await fetch(`${API}/api/inbound-routing/${modalEntry.number_id}/bind`, {
@@ -239,8 +255,11 @@ export function InboundRoutingPage() {
     }
   }
 
-  async function handleUnbind(numberId: string) {
-    if (!confirm('Remove agent binding from this phone number?')) return
+  function handleUnbind(numberId: string) {
+    setPendingAction({ type: 'unbind', numberId })
+  }
+
+  async function doUnbind(numberId: string) {
     setUnbindingId(numberId)
     try {
       const resp = await fetch(`${API}/api/inbound-routing/${numberId}/bind`, { method: 'DELETE' })
@@ -781,6 +800,24 @@ export function InboundRoutingPage() {
           </div>
         </div>
       )}
+
+      <PasswordConfirmModal
+        open={pendingAction !== null}
+        title={pendingAction?.type === 'unbind' ? 'Confirm Unbind' : 'Confirm Edit Binding'}
+        description={
+          pendingAction?.type === 'unbind'
+            ? 'Removing this binding will stop inbound calls from routing to an agent. This is a high-risk action.'
+            : 'Updating this binding affects live call routing. This is a high-risk action.'
+        }
+        confirmLabel={pendingAction?.type === 'unbind' ? 'Unbind' : 'Save Changes'}
+        onCancel={() => setPendingAction(null)}
+        onConfirm={() => {
+          const action = pendingAction
+          setPendingAction(null)
+          if (action?.type === 'unbind') doUnbind(action.numberId)
+          if (action?.type === 'submit') doSubmit()
+        }}
+      />
     </div>
   )
 }
