@@ -2,7 +2,7 @@ import json
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -36,6 +36,8 @@ class EndCallConfig(BaseModel):
 
 
 class DialTask(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
     phone_number: str
 
 
@@ -161,7 +163,7 @@ async def create_campaign(body: CreateCampaignRequest, db: AsyncSession = Depend
         'campaign_name': body.campaign_name,
         'phone_number_id': body.phone_number_id,
         'agent_id': body.agent_id,
-        'dial_tasks': [{'phone_number': t.phone_number} for t in body.dial_tasks],
+        'dial_tasks': [t.model_dump() for t in body.dial_tasks],
         'start_immediately': body.start_immediately,
         'end_call_config': body.end_call_config.model_dump(),
         'enable_transcript': body.enable_transcript,
